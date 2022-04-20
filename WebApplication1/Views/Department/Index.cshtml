@@ -1,0 +1,57 @@
+﻿@model IEnumerable<Department>
+
+@{
+    ViewBag.Title = "All Departments";
+}
+
+@if (Model.Any())
+{
+    <caption>All Departments</caption>
+    <table>
+        <thead>
+            <tr>
+                <th>Department</th>
+                <th>Manager</th>
+                <th>Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th>@item.Name</th>
+                    <th>@item.Manager</th>
+                    <th>
+                        @*<a id="button" data-route="@item.Id" class="btn btn-success">Details</a>*@
+                        <input type="button" id="button" data-route="@item.Id" class="btn btn-success" value="Details" />
+                    </th>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>there is no data found</p>
+}
+
+<a asp-action="create" class="btn btn-success">Add New Department</a>
+
+<div id="partial"></div>
+
+@section Scripts
+{
+<script>
+    $("button").click(function () {
+      var departmentId = $(this).attr("data-route");
+      console.log(departmentId);
+      $.ajax({
+        url: "/Department/Details/",
+        data: { id: departmentId },
+        success: function (result) {
+          $("#partial").html(result);
+        },
+      });
+    });
+</script>
+}

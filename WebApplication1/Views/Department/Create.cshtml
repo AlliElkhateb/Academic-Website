@@ -1,0 +1,31 @@
+﻿@model Department
+
+@{
+    ViewBag.Title = "Add New Department";
+}
+
+<h1>Create</h1>
+<form method="post" asp-action="create">
+    <div asp-validation-summary="All"></div>
+    <input asp-for="Id" type="hidden" />
+    <div>
+        <label asp-for="Name"></label>
+        <input asp-for="Name" />
+        <span class="text-danger" asp-validation-for="Name"></span>
+    </div>
+
+    <div>
+        <label asp-for="Manager"></label>
+        <input asp-for="Manager" />
+        <span class="text-danger" asp-validation-for="Manager"></span>
+    </div>
+
+    <div>
+        <input type="submit" value="Submit" />
+    </div>
+</form>
+
+@section Scripts{
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

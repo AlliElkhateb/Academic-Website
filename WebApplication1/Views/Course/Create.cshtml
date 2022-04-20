@@ -1,0 +1,48 @@
+﻿@model Course
+
+@{
+    ViewBag.Title = "All Courses";
+}
+
+@{
+    SelectList selectList;
+    if (Model is not null)
+    {
+        selectList = new(ViewBag.Departments, "Id", "Name", Model.DepartmentId);
+    }
+    else
+    {
+        selectList = new(ViewBag.Departments, "Id", "Name");
+    }
+}
+
+<form asp-action="Create" method="post">
+
+    <div>
+        <label asp-for="Name"></label>
+        <input asp-for="Name" />
+        <span class="text-danger" asp-validation-for="Name"></span>
+    </div>
+
+    <div>
+        <label asp-for="DepartmentId"></label>
+        <select asp-for="DepartmentId" asp-items="selectList"></select>
+        <span class="text-danger" asp-validation-for="Name"></span>
+    </div>
+
+    <div>
+        <label asp-for="MaxDegree"></label>
+        <input asp-for="MaxDegree" />
+        <span class="text-danger" asp-validation-for="MaxDegree"></span>
+    </div>
+
+    <div>
+        <label asp-for="MinDegree"></label>
+        <input asp-for="MinDegree" />
+        <span class="text-danger" asp-validation-for="MinDegree"></span>
+    </div>
+
+    <div>
+        <input type="submit" value="Submit" />
+    </div>
+</form>

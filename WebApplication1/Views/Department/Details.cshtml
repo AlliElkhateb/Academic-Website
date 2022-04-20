@@ -1,0 +1,9 @@
+﻿@model Department
+
+<div asp-validation-summary="All"></div>
+
+<p>@Model.Name</p>
+<p>@Model.Manager</p>
+
+<partial name="_Delete" model="@Model" />
+<partial name="_Edit" model="@Model" />

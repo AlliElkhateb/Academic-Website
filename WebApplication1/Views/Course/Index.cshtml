@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Course>
+
+@{
+    ViewBag.Title = "All Departments";
+}
+
+@if (Model.Any())
+{
+    <caption>All Courses</caption>
+    <table>
+        <thead>
+            <tr>
+                <th>Course</th>
+                <th>Department Name</th>
+                <th>Max Degree</th>
+                <th>Min Degree</th>
+                <th>Course Instructors</th>
+                <th>Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th>@item.Name</th>
+                    <th>@item.Department.Name</th>
+                    <th>@item.MaxDegree</th>
+                    <th>@item.MinDegree</th>
+                    <th>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-success">Details</a>
+                    </th>
+                    <th>
+                        <a asp-action="" asp-route-id="@item.Id">Show Instructors</a>
+                    </th>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>there is no data found</p>
+}
+
+<a asp-action="create">Add New Department</a>
