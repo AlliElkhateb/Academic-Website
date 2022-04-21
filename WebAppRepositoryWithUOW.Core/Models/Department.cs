@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebAppRepositoryWithUOW.Core.ModelsMetaData;
+using WebAppRepositoryWithUOW.Core.ModelsMetadata;
 
 namespace WebAppRepositoryWithUOW.Core.Models
 {
-    [ModelMetadataType(typeof(DepartmentMetaData))]
+    [ModelMetadataType(typeof(DepartmentMetadata))]
     public class Department
     {
         public int Id { get; set; }

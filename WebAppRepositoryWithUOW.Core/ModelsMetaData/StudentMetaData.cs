@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebAppRepositoryWithUOW.Core.ModelsMetaData
+namespace WebAppRepositoryWithUOW.Core.ModelsMetadata
 {
-    public class StudentMetaData
+    public class StudentMetadata
     {
         [Required(ErrorMessage = "name is required"),
          MaxLength(length: 50, ErrorMessage = "name must be less than 50 character")]

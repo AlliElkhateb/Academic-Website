@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebAppRepositoryWithUOW.Core.ModelsMetaData
+namespace WebAppRepositoryWithUOW.Core.ModelsMetadata
 {
-    public class StudentCourseMetaData
+    public class StudentCourseMetadata
     {
         [Display(Name = "Student")]
         public int StudentId { get; set; }

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebAppRepositoryWithUOW.Core.ModelsMetaData;
+using WebAppRepositoryWithUOW.Core.ModelsMetadata;
 
 namespace WebAppRepositoryWithUOW.Core.Models
 {
-    [ModelMetadataType(typeof(StudentMetaData))]
+    [ModelMetadataType(typeof(StudentMetadata))]
     public class Student
     {
         public int Id { get; set; }
