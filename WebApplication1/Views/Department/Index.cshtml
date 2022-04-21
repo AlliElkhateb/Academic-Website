@@ -22,8 +22,7 @@
                     <th>@item.Name</th>
                     <th>@item.Manager</th>
                     <th>
-                        @*<a id="button" data-route="@item.Id" class="btn btn-success">Details</a>*@
-                        <input type="button" id="button" data-route="@item.Id" class="btn btn-success" value="Details" />
+                        <a data-route="@item.Id" onclick="ajaxCall(event)" class="btn btn-success">Details</a>
                     </th>
                 </tr>
             }
@@ -42,8 +41,8 @@ else
 @section Scripts
 {
 <script>
-    $("button").click(function () {
-      var departmentId = $(this).attr("data-route");
+    function ajaxCall(event) {
+      var departmentId = $(event.target).attr("data-route");
       console.log(departmentId);
       $.ajax({
         url: "/Department/Details/",
@@ -52,6 +51,6 @@ else
           $("#partial").html(result);
         },
       });
-    });
+    }
 </script>
 }

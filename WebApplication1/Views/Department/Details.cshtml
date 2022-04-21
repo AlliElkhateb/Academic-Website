@@ -1,9 +1,13 @@
 ﻿@model Department
 
+@{
+    ViewBag.Title = "Details";
+}
+
 <div asp-validation-summary="All"></div>
 
 <p>@Model.Name</p>
 <p>@Model.Manager</p>
 
+<a asp-action="Update" asp-route-id="@Model.Id" class="btn btn-dark">Edit</a>
 <partial name="_Delete" model="@Model" />
-<partial name="_Edit" model="@Model" />

@@ -37,7 +37,7 @@ namespace WebApplication1.Controllers
         }
 
 
-        //httpPost: check for server side validation and confirm save data
+        //httpPost: check for validation and confirm save data
         [HttpPost]
         public async Task<IActionResult> Create([Bind("Name, Manager")] Department newDepartment)
         {
@@ -48,6 +48,28 @@ namespace WebApplication1.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(newDepartment);
+        }
+
+
+        //httpGet: create view to edit object
+        public async Task<IActionResult> Update(int id)
+        {
+            var department = await _unitOfWork.DepartmentRepository.GetObjectAsync(x => x.Id == id);
+            return View(department);
+        }
+
+
+        //httpPost: check for validation and confirm save data
+        [HttpPost]
+        public async Task<IActionResult> Update(Department modifiedDepartment)
+        {
+            if (ModelState.IsValid)
+            {
+                _unitOfWork.DepartmentRepository.Update(modifiedDepartment);
+                await _unitOfWork.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(modifiedDepartment);
         }
 
 
