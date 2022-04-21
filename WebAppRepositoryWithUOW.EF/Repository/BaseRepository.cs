@@ -15,66 +15,66 @@ namespace WebAppRepositoryWithUOW.EF.Repository
 
 
         // get all objects
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public IEnumerable<T> GetAll()
         {
-            return await _context.Set<T>().ToListAsync();
+            return _context.Set<T>().ToList();
         }
 
 
         // get all objects with include
-        public async Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] navigationProperties)
+        public IEnumerable<T> GetAll(params Expression<Func<T, object>>[] navigationProperties)
         {
             IQueryable<T> query = _context.Set<T>();
             foreach (var navigationProperty in navigationProperties)
             {
                 query.Include(navigationProperty);
             }
-            return await query.ToListAsync();
+            return query.ToList();
         }
 
 
         // get all objects with specific condition
-        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> selector)
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>> selector)
         {
-            return await _context.Set<T>().Where(selector).ToListAsync();
+            return _context.Set<T>().Where(selector).ToList();
         }
 
 
         // get all objects with specific condition with include
-        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> selector, params Expression<Func<T, object>>[] navigationProperties)
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>> selector, params Expression<Func<T, object>>[] navigationProperties)
         {
             IQueryable<T> query = _context.Set<T>().Where(selector);
             foreach (var navigationProperty in navigationProperties)
             {
                 query.Include(navigationProperty);
             }
-            return await query.ToListAsync();
+            return query.ToList();
         }
 
 
         //get object with specific condition
-        public async Task<T> GetObjectAsync(Expression<Func<T, bool>> selector)
+        public T Find(Expression<Func<T, bool>> selector)
         {
-            return await _context.Set<T>().SingleOrDefaultAsync(selector);
+            return _context.Set<T>().SingleOrDefault(selector);
         }
 
 
         //get object with specific condition with include
-        public async Task<T> GetObjectAsync(Expression<Func<T, bool>> selector, params Expression<Func<T, object>>[] navigationProperties)
+        public T Find(Expression<Func<T, bool>> selector, params Expression<Func<T, object>>[] navigationProperties)
         {
             IQueryable<T> query = _context.Set<T>();
             foreach (var navigationProperty in navigationProperties)
             {
                 query.Include(navigationProperty);
             }
-            return await query.SingleOrDefaultAsync(selector);
+            return query.SingleOrDefault(selector);
         }
 
 
         //add new object
-        public async Task CreateAsync(T entity)
+        public void Create(T entity)
         {
-            await _context.Set<T>().AddAsync(entity);
+            _context.Set<T>().Add(entity);
         }
 
 

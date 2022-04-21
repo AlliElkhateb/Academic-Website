@@ -34,9 +34,9 @@ namespace WebAppRepositoryWithUOW.EF
             StudentCourseRepository = new BaseRepository<StudentCourse>(_Context);
         }
 
-        public async Task SaveChanges()
+        public void SaveChanges()
         {
-            await _Context.SaveChangesAsync();
+            _Context.SaveChanges();
         }
 
         public void Dispose()

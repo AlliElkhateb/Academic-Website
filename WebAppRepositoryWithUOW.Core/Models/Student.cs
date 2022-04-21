@@ -20,6 +20,6 @@ namespace WebAppRepositoryWithUOW.Core.Models
 
         public Department Department { get; set; }
 
-        public List<StudentCourse> StudentCourses { get; set; }
+        public IEnumerable<StudentCourse> StudentCourses { get; set; }
     }
 }

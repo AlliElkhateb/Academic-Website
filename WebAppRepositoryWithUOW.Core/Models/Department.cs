@@ -12,10 +12,10 @@ namespace WebAppRepositoryWithUOW.Core.Models
 
         public string Manager { get; set; }
 
-        public List<Student> Students { get; set; }
+        public IEnumerable<Student> Students { get; set; }
 
-        public List<Instructor> Instructors { get; set; }
+        public IEnumerable<Instructor> Instructors { get; set; }
 
-        public List<Course> Courses { get; set; }
+        public IEnumerable<Course> Courses { get; set; }
     }
 }

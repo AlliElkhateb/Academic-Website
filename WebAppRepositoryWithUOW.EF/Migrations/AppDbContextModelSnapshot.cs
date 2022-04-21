@@ -47,7 +47,7 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("Courses");
+                    b.ToTable("Courses", (string)null);
                 });
 
             modelBuilder.Entity("WebAppRepositoryWithUOW.Core.Models.Department", b =>
@@ -68,7 +68,7 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Departments");
+                    b.ToTable("Departments", (string)null);
                 });
 
             modelBuilder.Entity("WebAppRepositoryWithUOW.Core.Models.Instructor", b =>
@@ -108,7 +108,7 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("Instructors");
+                    b.ToTable("Instructors", (string)null);
                 });
 
             modelBuilder.Entity("WebAppRepositoryWithUOW.Core.Models.Student", b =>
@@ -140,7 +140,7 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("Students");
+                    b.ToTable("Students", (string)null);
                 });
 
             modelBuilder.Entity("WebAppRepositoryWithUOW.Core.Models.StudentCourse", b =>
@@ -158,7 +158,7 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("StudentCourses");
+                    b.ToTable("StudentCourses", (string)null);
                 });
 
             modelBuilder.Entity("WebAppRepositoryWithUOW.Core.Models.Course", b =>

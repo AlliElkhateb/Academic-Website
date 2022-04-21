@@ -15,6 +15,6 @@ namespace WebAppRepositoryWithUOW.Core
 
         IBaseRepository<StudentCourse> StudentCourseRepository { get; }
 
-        Task SaveChanges();
+        void SaveChanges();
     }
 }
