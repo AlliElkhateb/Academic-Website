@@ -4,10 +4,10 @@ using WebAppRepositoryWithUOW.Core.Models;
 
 namespace WebApplication1.Controllers
 {
-    public class CourseController : Controller
+    public class InstructorController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        public CourseController(IUnitOfWork unitOfWork)
+        public InstructorController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -16,59 +16,60 @@ namespace WebApplication1.Controllers
         //httpGet: get all departments
         public IActionResult Index()
         {
-            var courses = _unitOfWork.CourseRepository.GetAll(x => x.Department);
-            return View(courses);
+            var instructor = _unitOfWork.InstructorRepository.GetAll(x => x.Department, x => x.Course);
+            return View(instructor);
         }
 
 
         //httpGet: get detail of object
         public IActionResult Details(int id)
         {
-            var course = _unitOfWork.CourseRepository.Find(x => x.Id == id, x => x.Department);
-            return View(course);
+            var instructor = _unitOfWork.InstructorRepository.Find(x => x.Id == id, x => x.Department, x => x.Course);
+            return View(instructor);
         }
 
 
         //httpGet: create view to add new object
         public IActionResult Create()
         {
-            var newCourse = new Course();
-            return View(newCourse);
+            var newInstructor = new Instructor();
+            return View(newInstructor);
         }
 
 
         //httpPost: check for validation and confirm save data
         [HttpPost]
-        public IActionResult Create([Bind("Name, MaxDegree, MinDegree, DepartmentId")] Course newCourse)
+        public IActionResult Create([Bind("Name, Age, Address, Salary, Image, CourseId, DepartmentId")] Instructor newInstructor)
         {
             if (ModelState.IsValid)
             {
-                _unitOfWork.CourseRepository.Create(newCourse);
+                _unitOfWork.InstructorRepository.Create(newInstructor);
                 _unitOfWork.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
-            return View(newCourse);
+            return View(newInstructor);
         }
+
 
         //httpGet: create view to edit object
         public IActionResult Update(int id)
         {
-            var course = _unitOfWork.DepartmentRepository.Find(x => x.Id == id);
-            return View(course);
+            var instructor = _unitOfWork.InstructorRepository.Find(x => x.Id == id);
+            return View(instructor);
         }
 
 
         //httpPost: check for validation and confirm save data
         [HttpPost]
-        public IActionResult Update(Course modifiedCourse)
+        public IActionResult Update(Instructor modifiedInstructor)
         {
             if (ModelState.IsValid)
             {
-                _unitOfWork.CourseRepository.Update(modifiedCourse);
+                _unitOfWork.InstructorRepository.Update(modifiedInstructor);
                 _unitOfWork.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
-            return View(modifiedCourse);
+            return View(modifiedInstructor);
         }
 
 
@@ -77,8 +78,8 @@ namespace WebApplication1.Controllers
         {
             try
             {
-                var course = _unitOfWork.CourseRepository.Find(x => x.Id == id);
-                _unitOfWork.CourseRepository.Delete(course);
+                var instructor = _unitOfWork.InstructorRepository.Find(x => x.Id == id);
+                _unitOfWork.InstructorRepository.Delete(instructor);
                 _unitOfWork.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
@@ -88,6 +89,5 @@ namespace WebApplication1.Controllers
                 return View(nameof(Index));
             }
         }
-
     }
 }

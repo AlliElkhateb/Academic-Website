@@ -12,8 +12,8 @@ using WebAppRepositoryWithUOW.EF;
 namespace WebAppRepositoryWithUOW.EF.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220419214300_ChangeDepartmentIdInStudentClass")]
-    partial class ChangeDepartmentIdInStudentClass
+    [Migration("20220425193500_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

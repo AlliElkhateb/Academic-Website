@@ -33,7 +33,8 @@ namespace WebApplication1.Controllers
         //httpGet: create view to add new object
         public IActionResult Create()
         {
-            return View();
+            var newDepartment = new Department();
+            return View(newDepartment);
         }
 
 

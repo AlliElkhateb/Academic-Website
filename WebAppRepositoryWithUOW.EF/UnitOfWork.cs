@@ -9,16 +9,6 @@ namespace WebAppRepositoryWithUOW.EF
     {
         private readonly AppDbContext _Context;
 
-        public IBaseRepository<Department> DepartmentRepository { get; }
-
-        public IBaseRepository<Student> StudentRepository { get; }
-
-        public IBaseRepository<Instructor> InstructorRepository { get; }
-
-        public IBaseRepository<Course> CourseRepository { get; }
-
-        public IBaseRepository<StudentCourse> StudentCourseRepository { get; }
-
         public UnitOfWork(AppDbContext Context)
         {
             _Context = Context;
@@ -34,6 +24,16 @@ namespace WebAppRepositoryWithUOW.EF
             StudentCourseRepository = new BaseRepository<StudentCourse>(_Context);
         }
 
+        public IBaseRepository<Department> DepartmentRepository { get; private set; }
+
+        public IBaseRepository<Student> StudentRepository { get; private set; }
+
+        public IBaseRepository<Instructor> InstructorRepository { get; private set; }
+
+        public IBaseRepository<Course> CourseRepository { get; private set; }
+
+        public IBaseRepository<StudentCourse> StudentCourseRepository { get; private set; }
+
         public void SaveChanges()
         {
             _Context.SaveChanges();
@@ -43,6 +43,5 @@ namespace WebAppRepositoryWithUOW.EF
         {
             _Context.Dispose();
         }
-
     }
 }

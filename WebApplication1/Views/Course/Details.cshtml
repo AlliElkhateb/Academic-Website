@@ -10,14 +10,17 @@
     <h4>Course</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Model.Name
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Model.MaxDegree
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Model.MinDegree
+        </dt>
+        <dt class="col-sm-2">
+            @Model.Department.Name
         </dt>
     </dl>
 </div>

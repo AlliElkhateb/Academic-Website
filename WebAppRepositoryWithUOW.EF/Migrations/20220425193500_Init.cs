@@ -30,7 +30,6 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    StudentDegree = table.Column<int>(type: "int", nullable: false),
                     MaxDegree = table.Column<int>(type: "int", nullable: false),
                     MinDegree = table.Column<int>(type: "int", nullable: false),
                     DepartmentId = table.Column<int>(type: "int", nullable: false)
@@ -56,14 +55,14 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
                     Age = table.Column<int>(type: "int", nullable: false),
                     Image = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
-                    DeptId = table.Column<int>(type: "int", nullable: false)
+                    DepartmentId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Students", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Students_Departments_DeptId",
-                        column: x => x.DeptId,
+                        name: "FK_Students_Departments_DepartmentId",
+                        column: x => x.DepartmentId,
                         principalTable: "Departments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -105,7 +104,8 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
                 columns: table => new
                 {
                     StudentId = table.Column<int>(type: "int", nullable: false),
-                    CoursetId = table.Column<int>(type: "int", nullable: false)
+                    CoursetId = table.Column<int>(type: "int", nullable: false),
+                    StudentDegree = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -145,9 +145,9 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
                 column: "StudentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Students_DeptId",
+                name: "IX_Students_DepartmentId",
                 table: "Students",
-                column: "DeptId");
+                column: "DepartmentId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
