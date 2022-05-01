@@ -1,20 +1,16 @@
-﻿@model Course
-
-@inject IUnitOfWork _unitOfWork
+﻿@model CourseVM
 
 @{
     ViewBag.Title = "All Courses";
-}
 
-@{
     SelectList selectList;
     if (Model is not null)
     {
-        selectList = new(_unitOfWork.DepartmentRepository.GetAll(), "Id", "Name", Model.DepartmentId);
+        selectList = new(Model.Departments, "Id", "Name", Model.DepartmentId);
     }
     else
     {
-        selectList = new(_unitOfWork.DepartmentRepository.GetAll(), "Id", "Name");
+        selectList = new(Model.Departments, "Id", "Name");
     }
 }
 

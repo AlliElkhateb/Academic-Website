@@ -1,18 +1,23 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using WebAppRepositoryWithUOW.Core.Models;
 
-namespace WebAppRepositoryWithUOW.Core.ModelsMetadata
+namespace WebAppRepositoryWithUOW.Core.ViewModel
 {
-    public class StudentMetadata
+    public class StudentVM
     {
+        public int Id { get; set; }
+
+
         [Required(ErrorMessage = "name is required"),
          MaxLength(length: 50, ErrorMessage = "name must be less than 50 character")]
         public string Name { get; set; }
 
 
-
-        [Range(minimum: 20, maximum: 50)]
+        [Range(minimum: 20, maximum: 50, ErrorMessage = "age must be between 20 and 50 years")]
         public int Age { get; set; }
 
+
+        public byte[]? Image { get; set; }
 
 
         [Required(ErrorMessage = "Address is required"),
@@ -20,8 +25,12 @@ namespace WebAppRepositoryWithUOW.Core.ModelsMetadata
         public string Address { get; set; }
 
 
-
         [Display(Name = "Department")]
         public int DepartmentId { get; set; }
+        public Department? Department { get; set; }
+        public IEnumerable<Department>? Departments { get; set; }
+
+
+        public IEnumerable<StudentCourse>? StudentCourses { get; set; }
     }
 }

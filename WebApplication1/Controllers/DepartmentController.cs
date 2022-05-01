@@ -1,16 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using WebAppRepositoryWithUOW.Core;
 using WebAppRepositoryWithUOW.Core.Models;
+using WebAppRepositoryWithUOW.Core.ViewModel;
 
 namespace WebApplication1.Controllers
 {
     public class DepartmentController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public DepartmentController(IUnitOfWork unitOfWork)
+        public DepartmentController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
 
@@ -18,33 +22,40 @@ namespace WebApplication1.Controllers
         public IActionResult Index()
         {
             var departments = _unitOfWork.DepartmentRepository.GetAll();
-            return View(departments);
+            var result = _mapper.Map<IEnumerable<DepartmentVM>>(departments);
+            return View(result);
         }
 
 
         //httpGet: get detail of object
-        public IActionResult Details(int id)
+        public IActionResult Details([FromRoute] int id)
         {
             var department = _unitOfWork.DepartmentRepository.Find(x => x.Id == id);
-            return PartialView(department);
+            var result = _mapper.Map<DepartmentVM>(department);
+            result.Courses = _unitOfWork.CourseRepository.GetAll(x => x.DepartmentId == department.Id);
+            result.Instructors = _unitOfWork.InstructorRepository.GetAll(x => x.DepartmentId == department.Id);
+            result.Students = _unitOfWork.StudentRepository.GetAll(x => x.DepartmentId == department.Id);
+            return PartialView(result);
         }
 
 
         //httpGet: create view to add new object
         public IActionResult Create()
         {
-            var newDepartment = new Department();
+            var newDepartment = new DepartmentVM();
             return View(newDepartment);
         }
 
 
         //httpPost: check for validation and confirm save data
         [HttpPost]
-        public IActionResult Create([Bind("Name, Manager")] Department newDepartment)
+        public IActionResult Create([FromForm] DepartmentVM newDepartment)
         {
+            //Bind("Name, Manager")
             if (ModelState.IsValid)
             {
-                _unitOfWork.DepartmentRepository.Create(newDepartment);
+                var result = _mapper.Map<Department>(newDepartment);
+                _unitOfWork.DepartmentRepository.Create(result);
                 _unitOfWork.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
@@ -53,20 +64,22 @@ namespace WebApplication1.Controllers
 
 
         //httpGet: create view to edit object
-        public IActionResult Update(int id)
+        public IActionResult Update([FromRoute] int id)
         {
             var department = _unitOfWork.DepartmentRepository.Find(x => x.Id == id);
-            return View(department);
+            var result = _mapper.Map<DepartmentVM>(department);
+            return View(result);
         }
 
 
         //httpPost: check for validation and confirm save data
         [HttpPost]
-        public IActionResult Update(Department modifiedDepartment)
+        public IActionResult Update([FromForm] DepartmentVM modifiedDepartment)
         {
             if (ModelState.IsValid)
             {
-                _unitOfWork.DepartmentRepository.Update(modifiedDepartment);
+                var result = _mapper.Map<Department>(modifiedDepartment);
+                _unitOfWork.DepartmentRepository.Update(result);
                 _unitOfWork.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
@@ -75,18 +88,18 @@ namespace WebApplication1.Controllers
 
 
         //httpGet: delete
-        public IActionResult Delete(int id)
+        public IActionResult Delete([FromRoute] int id)
         {
             try
             {
-                var department = _unitOfWork.DepartmentRepository.Find(x => x.Id == id);
+                var department = new Department { Id = id };
                 _unitOfWork.DepartmentRepository.Delete(department);
                 _unitOfWork.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                ModelState.AddModelError(null, ex.InnerException.Message);
+                ModelState.AddModelError(null, exception.InnerException.Message);
                 return View(nameof(Index));
             }
         }

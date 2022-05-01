@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
+
 //register Db options 
 builder.Services.AddDbContext<AppDbContext>(
     options => options.UseSqlServer(
@@ -15,8 +16,14 @@ builder.Services.AddDbContext<AppDbContext>(
         ));
 //register generic base repository
 //builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+
 //register IunitOfWork
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+//register Auto Mapper
+builder.Services.AddAutoMapper(typeof(Program));
+
+
 
 
 

@@ -1,12 +1,13 @@
-﻿@model IEnumerable<Department>
+﻿@model IEnumerable<DepartmentVM>
 
 @{
     ViewBag.Title = "All Departments";
 }
 
+<h2>All Departments</h2>
+<hr />
 @if (Model.Any())
 {
-    <caption>All Departments</caption>
     <table class="table">
         <thead>
             <tr>
@@ -47,7 +48,7 @@ else
 }
 
 <a asp-action="create" class="btn btn-primary">
-    <i class="bi bi-plus-circle"></i>Add New Department 
+    <i class="bi bi-plus-circle"></i>Add New Department
 </a>
 
 <div id="partial"></div>

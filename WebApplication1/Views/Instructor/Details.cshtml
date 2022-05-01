@@ -1,0 +1,54 @@
+﻿@model InstructorVM
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+<hr />
+<h4>Instructor</h4>
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            <span>Name: @Model.Name</span>
+        </dt>
+        <dd class="col-sm-10">
+            <span>Age: @Model.Age</span>
+        </dd>
+        <dt class="col-sm-2">
+            <span>Address: @Model.Address</span>
+        </dt>
+        <dd class="col-sm-10">
+            <span>Salary: @Model.Salary</span>
+        </dd>
+        <dt class="col-sm-2">
+            <span>Department: </span>
+            @if (@Model.Department is not null)
+            {
+                <span>@Model.Department.Name</span>
+            }
+            else
+            {
+                <div class="alert alert-warning" role="alert">
+                    this instructor not assign to any department yet
+                </div>
+            }
+        </dt>
+        <dd class="col-sm-10">
+            <span>Course: </span>
+            @if (@Model.Course is not null)
+            {
+                <span>@Model.Course.Name</span>
+            }
+            else
+            {
+                <div class="alert alert-warning" role="alert">
+                    this instructor not assign to any Course yet
+                </div>
+            }
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

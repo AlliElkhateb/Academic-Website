@@ -6,22 +6,22 @@ using WebAppRepositoryWithUOW.Core.ViewModel;
 
 namespace WebApplication1.Controllers
 {
-    public class CourseController : Controller
+    public class StudentController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public CourseController(IUnitOfWork unitOfWork, IMapper mapper)
+        public StudentController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
 
-        //httpGet: get all departments
+        //httpGet: get all Student
         public IActionResult Index()
         {
-            var courses = _unitOfWork.CourseRepository.GetAll();
-            var result = _mapper.Map<IEnumerable<CourseVM>>(courses);
+            var students = _unitOfWork.StudentRepository.GetAll();
+            var result = _mapper.Map<IEnumerable<StudentVM>>(students);
             return View(result);
         }
 
@@ -29,11 +29,10 @@ namespace WebApplication1.Controllers
         //httpGet: get detail of object
         public IActionResult Details([FromRoute] int id)
         {
-            var course = _unitOfWork.CourseRepository.Find(x => x.Id == id);
-            var result = _mapper.Map<CourseVM>(course);
-            result.Instructors = _unitOfWork.InstructorRepository.GetAll(x => x.CourseId == course.Id);
-            result.Department = _unitOfWork.DepartmentRepository.Find(x => x.Id == course.DepartmentId);
-            result.StudentCourses = _unitOfWork.StudentCourseRepository.GetAll(x => x.CourseId == course.Id);
+            var student = _unitOfWork.StudentRepository.Find(x => x.Id == id);
+            var result = _mapper.Map<StudentVM>(student);
+            result.Department = _unitOfWork.DepartmentRepository.Find(x => x.Id == student.DepartmentId);
+            result.StudentCourses = _unitOfWork.StudentCourseRepository.GetAll(x => x.StudentId == student.Id, x => x.Course); 
             return View(result);
         }
 
@@ -41,34 +40,34 @@ namespace WebApplication1.Controllers
         //httpGet: create view to add new object
         public IActionResult Create()
         {
-            var newCourse = new CourseVM
+            var newStudent = new StudentVM
             {
                 Departments = _unitOfWork.DepartmentRepository.GetAll()
             };
-            return View(newCourse);
+            return View(newStudent);
         }
 
 
         //httpPost: check for validation and confirm save data
         [HttpPost]
-        public IActionResult Create([FromForm] CourseVM newCourse)
+        public IActionResult Create([FromForm] StudentVM newStudent)
         {
             //Bind("Name, MaxDegree, MinDegree, DepartmentId"),
             if (ModelState.IsValid)
             {
-                var result = _mapper.Map<Course>(newCourse);
-                _unitOfWork.CourseRepository.Create(result);
+                var result = _mapper.Map<Student>(newStudent);
+                _unitOfWork.StudentRepository.Create(result);
                 _unitOfWork.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
-            return View(newCourse);
+            return View(newStudent);
         }
 
         //httpGet: create view to edit object
         public IActionResult Update([FromRoute] int id)
         {
-            var course = _unitOfWork.CourseRepository.Find(x => x.Id == id);
-            var result = _mapper.Map<CourseVM>(course);
+            var student = _unitOfWork.DepartmentRepository.Find(x => x.Id == id);
+            var result = _mapper.Map<StudentVM>(student);
             result.Departments = _unitOfWork.DepartmentRepository.GetAll();
             return View(result);
         }
@@ -76,16 +75,16 @@ namespace WebApplication1.Controllers
 
         //httpPost: check for validation and confirm save data
         [HttpPost]
-        public IActionResult Update([FromForm] CourseVM modifiedCourse)
+        public IActionResult Update([FromForm] StudentVM modifiedStudent)
         {
             if (ModelState.IsValid)
             {
-                var result = _mapper.Map<Course>(modifiedCourse);
-                _unitOfWork.CourseRepository.Update(result);
+                var result = _mapper.Map<Student>(modifiedStudent);
+                _unitOfWork.StudentRepository.Update(result);
                 _unitOfWork.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
-            return View(modifiedCourse);
+            return View(modifiedStudent);
         }
 
 
@@ -94,8 +93,8 @@ namespace WebApplication1.Controllers
         {
             try
             {
-                var course = new Course { Id = id };
-                _unitOfWork.CourseRepository.Delete(course);
+                var student = new Student { Id = id };
+                _unitOfWork.StudentRepository.Delete(student);
                 _unitOfWork.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
@@ -105,6 +104,5 @@ namespace WebApplication1.Controllers
                 return View(nameof(Index));
             }
         }
-
     }
 }

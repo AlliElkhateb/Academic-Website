@@ -1,23 +1,24 @@
-﻿@model IEnumerable<CourseVM>
+﻿@model IEnumerable<StudentVM>
 
 @{
-    ViewBag.Title = "All Courses";
+    ViewBag.Title = "All Students";
 }
-<h2>All Courses</h2>
+<h2>All Students</h2>
 <hr />
 @if (Model.Any())
 {
+
     <table class="table">
         <thead>
             <tr>
                 <th>
-                    Course
+                    Name
                 </th>
                 <th>
-                    Max Degree
+                    Age
                 </th>
                 <th>
-                    Min Degree
+                    Address
                 </th>
                 <th>
                     Controls
@@ -32,10 +33,10 @@
                         @item.Name
                     </td>
                     <td>
-                        @item.MaxDegree
+                        @item.Age
                     </td>
                     <td>
-                        @item.MinDegree
+                        @item.Address
                     </td>
                     <td>
                         <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
@@ -53,45 +54,5 @@ else
 }
 
 <a asp-action="create" class="btn btn-primary">
-    <i class="bi bi-plus-circle"></i>Add New Course
+    <i class="bi bi-plus-circle"></i>Add New Student
 </a>
-
-
-
-@*                <th>
-    Department Name
-    </th>*@
-@*                <th>
-    Course Instructors
-    </th>*@
-
-@*                    <td>
-    @if (@item.Departments.Any())
-    {
-    @foreach (var department in @item.Departments)
-    {
-    <p>@department.Name</p>
-    }
-    }
-    else
-    {
-    <span>this course not assign to department yet</span>
-    }
-    </td>*@
-
-
-
-
-@*                    <td>
-    @if (item.Instructors.Any())
-    {
-    @foreach (var instructor in @item.Instructors)
-    {
-    <p>@instructor.Name</p>
-    }
-    }
-    else
-    {
-    <span>this course not have any instructors yet</span>
-    }
-    </td>*@

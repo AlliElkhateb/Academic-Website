@@ -12,7 +12,7 @@ using WebAppRepositoryWithUOW.EF;
 namespace WebAppRepositoryWithUOW.EF.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220425193500_Init")]
+    [Migration("20220502090453_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,6 +42,7 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -61,10 +62,12 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Manager")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -82,6 +85,7 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
@@ -98,6 +102,7 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -122,6 +127,7 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
@@ -135,6 +141,7 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -147,7 +154,7 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
 
             modelBuilder.Entity("WebAppRepositoryWithUOW.Core.Models.StudentCourse", b =>
                 {
-                    b.Property<int>("CoursetId")
+                    b.Property<int>("CourseId")
                         .HasColumnType("int");
 
                     b.Property<int>("StudentId")
@@ -156,7 +163,7 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
                     b.Property<int>("StudentDegree")
                         .HasColumnType("int");
 
-                    b.HasKey("CoursetId", "StudentId");
+                    b.HasKey("CourseId", "StudentId");
 
                     b.HasIndex("StudentId");
 
@@ -208,7 +215,7 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
                 {
                     b.HasOne("WebAppRepositoryWithUOW.Core.Models.Course", "Course")
                         .WithMany("StudentCourses")
-                        .HasForeignKey("CoursetId")
+                        .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

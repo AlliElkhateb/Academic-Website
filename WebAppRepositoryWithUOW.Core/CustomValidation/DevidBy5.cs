@@ -5,7 +5,7 @@ namespace WebAppRepositoryWithUOW.Core.CustomValidation
     internal class DevidByNumber : ValidationAttribute
     {
         public int Number { get; set; }
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        protected override ValidationResult IsValid(object? value, ValidationContext validationContext)
         {
             //Student? student = validationContext.ObjectInstance as Student;
             //student.Age
