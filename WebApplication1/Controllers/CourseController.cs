@@ -21,7 +21,7 @@ namespace WebApplication1.Controllers
         public IActionResult Index()
         {
             var courses = _unitOfWork.CourseRepository.GetAll();
-            var result = _mapper.Map<IEnumerable<CourseVM>>(courses);
+            var result = _mapper.Map<IEnumerable<CourseVM>>(courses).OrderBy(x => x.Name);
             return View(result);
         }
 
@@ -31,7 +31,7 @@ namespace WebApplication1.Controllers
         {
             var course = _unitOfWork.CourseRepository.Find(x => x.Id == id);
             var result = _mapper.Map<CourseVM>(course);
-            result.Instructors = _unitOfWork.InstructorRepository.GetAll(x => x.CourseId == course.Id);
+            result.Instructors = _unitOfWork.InstructorRepository.GetAll(x => x.CourseId == course.Id).OrderBy(x => x.Name);
             result.Department = _unitOfWork.DepartmentRepository.Find(x => x.Id == course.DepartmentId);
             result.StudentCourses = _unitOfWork.StudentCourseRepository.GetAll(x => x.CourseId == course.Id);
             return View(result);
@@ -43,7 +43,7 @@ namespace WebApplication1.Controllers
         {
             var newCourse = new CourseVM
             {
-                Departments = _unitOfWork.DepartmentRepository.GetAll()
+                Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name)
             };
             return View(newCourse);
         }
@@ -61,6 +61,7 @@ namespace WebApplication1.Controllers
                 _unitOfWork.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
+            newCourse.Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name);
             return View(newCourse);
         }
 
@@ -69,7 +70,7 @@ namespace WebApplication1.Controllers
         {
             var course = _unitOfWork.CourseRepository.Find(x => x.Id == id);
             var result = _mapper.Map<CourseVM>(course);
-            result.Departments = _unitOfWork.DepartmentRepository.GetAll();
+            result.Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name);
             return View(result);
         }
 
@@ -85,6 +86,7 @@ namespace WebApplication1.Controllers
                 _unitOfWork.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
+            modifiedCourse.Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name);
             return View(modifiedCourse);
         }
 

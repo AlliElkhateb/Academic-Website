@@ -33,9 +33,10 @@
                         @item.Manager
                     </td>
                     <td>
-                        <a href="#" data-route="@item.Id" onclick="ajaxCall(event)">Details</a> |
-                        <a asp-action="Update" asp-route-id="@item.Id">Edit</a> |
-                        <i class="bi bi-trash3"></i><partial name="_Delete" model="@item" />
+                        @*<a href="#" data-route="@item.Id" onclick="ajaxCall(event)">Details</a>*@
+                        <i class="bi bi-ticket-detailed"></i> <a asp-action="details" asp-route-id="@item.Id">Details</a> |
+                        <i class="bi bi-pencil-square"></i> <a asp-action="Update" asp-route-id="@item.Id">Edit</a> |
+                        <i class="bi bi-trash3"></i> <partial name="_Delete" model="@item" />
                     </td>
                 </tr>
             }
@@ -44,29 +45,31 @@
 }
 else
 {
-    <p>there is no data found</p>
+    <div class="alert alert-warning" role="alert">
+        there is no data found
+    </div>
 }
 
 <a asp-action="create" class="btn btn-primary">
-    <i class="bi bi-plus-circle"></i>Add New Department
+    <i class="bi bi-plus-lg"></i> Add New Department
 </a>
 
-<div id="partial"></div>
+@*<div id="partial"></div>*@
 
-@section Scripts
-{
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script>
+@*@section Scripts
+    {
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script>
     function ajaxCall(event) {
-      var departmentId = $(event.target).attr("data-route");
-      console.log(departmentId);
-      $.ajax({
-        url: "/Department/Details/",
-        data: { id: departmentId },
-        success: function (result) {
-          $("#partial").html(result);
-        },
-      });
+    var departmentId = $(event.target).attr("data-route");
+    console.log(departmentId);
+    $.ajax({
+    url: "/Department/Details",
+    data: { id: departmentId },
+    success: function (result) {
+    $("#partial").html(result);
+    },
+    });
     }
-</script>
-}
+    </script>
+    }*@

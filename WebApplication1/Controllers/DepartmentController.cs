@@ -22,12 +22,13 @@ namespace WebApplication1.Controllers
         public IActionResult Index()
         {
             var departments = _unitOfWork.DepartmentRepository.GetAll();
-            var result = _mapper.Map<IEnumerable<DepartmentVM>>(departments);
+            var result = _mapper.Map<IEnumerable<DepartmentVM>>(departments).OrderBy(x => x.Name);
             return View(result);
         }
 
 
         //httpGet: get detail of object
+        [HttpGet(template: "{id:int}")]
         public IActionResult Details([FromRoute] int id)
         {
             var department = _unitOfWork.DepartmentRepository.Find(x => x.Id == id);
@@ -35,7 +36,8 @@ namespace WebApplication1.Controllers
             result.Courses = _unitOfWork.CourseRepository.GetAll(x => x.DepartmentId == department.Id);
             result.Instructors = _unitOfWork.InstructorRepository.GetAll(x => x.DepartmentId == department.Id);
             result.Students = _unitOfWork.StudentRepository.GetAll(x => x.DepartmentId == department.Id);
-            return PartialView(result);
+            //return PartialView(result);
+            return View(result);
         }
 
 

@@ -21,7 +21,11 @@ namespace WebApplication1.Controllers
         public IActionResult Index()
         {
             var students = _unitOfWork.StudentRepository.GetAll();
-            var result = _mapper.Map<IEnumerable<StudentVM>>(students);
+            var result = _mapper.Map<IEnumerable<StudentVM>>(students).OrderBy(x => x.Name);
+            foreach (var student in result)
+            {
+                student.Department = _unitOfWork.DepartmentRepository.Find(x => x.Id == student.DepartmentId);
+            }
             return View(result);
         }
 
@@ -32,7 +36,7 @@ namespace WebApplication1.Controllers
             var student = _unitOfWork.StudentRepository.Find(x => x.Id == id);
             var result = _mapper.Map<StudentVM>(student);
             result.Department = _unitOfWork.DepartmentRepository.Find(x => x.Id == student.DepartmentId);
-            result.StudentCourses = _unitOfWork.StudentCourseRepository.GetAll(x => x.StudentId == student.Id, x => x.Course); 
+            //result.StudentCourses = _unitOfWork.StudentCourseRepository.GetAll(x => x.StudentId == student.Id, x => x.Course);
             return View(result);
         }
 
@@ -42,7 +46,7 @@ namespace WebApplication1.Controllers
         {
             var newStudent = new StudentVM
             {
-                Departments = _unitOfWork.DepartmentRepository.GetAll()
+                Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name)
             };
             return View(newStudent);
         }
@@ -60,15 +64,16 @@ namespace WebApplication1.Controllers
                 _unitOfWork.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
+            newStudent.Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name);
             return View(newStudent);
         }
 
         //httpGet: create view to edit object
         public IActionResult Update([FromRoute] int id)
         {
-            var student = _unitOfWork.DepartmentRepository.Find(x => x.Id == id);
+            var student = _unitOfWork.StudentRepository.Find(x => x.Id == id);
             var result = _mapper.Map<StudentVM>(student);
-            result.Departments = _unitOfWork.DepartmentRepository.GetAll();
+            result.Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name);
             return View(result);
         }
 
@@ -84,6 +89,7 @@ namespace WebApplication1.Controllers
                 _unitOfWork.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
+            modifiedStudent.Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name);
             return View(modifiedStudent);
         }
 

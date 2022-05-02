@@ -20,7 +20,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="create">
+        <form asp-action="create" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <input type="hidden" asp-for="Id" class="form-control" />
@@ -30,24 +30,28 @@
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div>
+            <div class="form-group">
                 <label asp-for="MaxDegree"></label>
-                <input asp-for="MaxDegree" />
+                <input asp-for="MaxDegree" class="form-control" value="" />
                 <span class="text-danger" asp-validation-for="MaxDegree"></span>
             </div>
-            <div>
+            <div class="form-group">
                 <label asp-for="MinDegree"></label>
-                <input asp-for="MinDegree" />
+                <input asp-for="MinDegree" class="form-control" value="" />
                 <span class="text-danger" asp-validation-for="MinDegree"></span>
             </div>
-            <div>
+            <div class="form-group">
                 <label asp-for="DepartmentId"></label>
-                <select asp-for="DepartmentId" asp-items="selectList"></select>
+                <select asp-for="DepartmentId" asp-items="selectList" class="form-select">
+                    <option>select department</option>
+                </select>
                 <span class="text-danger" asp-validation-for="DepartmentId"></span>
             </div>
             <div class="form-group mt-2">
-                <input type="submit" value="Save" class="btn btn-success" />
-                <a asp-action="index" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-success me-2">
+                    <i class="bi bi-check-lg"></i> Save
+                </button>
+                <a asp-action="index" class="btn btn-secondary"><i class="bi bi-x-lg"></i> Cancel</a>
             </div>
         </form>
     </div>

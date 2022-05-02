@@ -7,61 +7,65 @@
 <h2>Details</h2>
 <hr />
 <h4>Course</h4>
-<div>
-    <dl class="row">
-        <dt class="col-sm-2">
-            <span>Name: @Model.Name</span>
-        </dt>
-        <dd class="col-sm-10">
-            <span>Max Degree: @Model.MaxDegree</span>
-        </dd>
-        <dt class="col-sm-2">
-            <span>Min Degree: @Model.MinDegree</span>
-        </dt>
-        <dt class="col-sm-2">
-            <span>Departments: </span>
-            @if (@Model.Department is not null)
+
+<section class="container mb-2">
+
+    <span class="fw-bold">Name:</span>
+    <span class="ms-2">@Model.Name</span>
+    <br />
+
+    <span class="fw-bold">Max Degree:</span>
+    <span class="ms-2">@Model.MaxDegree</span>
+    <br />
+
+    <span class="fw-bold">Min Degree:</span>
+    <span class="ms-2">@Model.MinDegree</span>
+    <br />
+
+    <div>
+        <span class="fw-bold">Departments:</span>
+        @if (@Model.Department is not null)
+        {
+            <span class="ms-2">@Model.Department.Name</span>
+        }
+        else
+        {
+            <div class="alert alert-warning" role="alert">
+                this course not assign to department yet
+            </div>
+        }
+    </div>
+
+    <div>
+        <span class="fw-bold">Instructors:</span>
+        @if (Model.Instructors.Any())
+        {
+            @foreach (var instructor in Model.Instructors)
             {
-                <span>@Model.Department.Name</span>
+                <span class="ms-2">@instructor.Name</span>
             }
-            else
-            {
-                <div class="alert alert-warning" role="alert">
-                    this course not assign to any department yet
-                </div>
-            }
-        </dt>
-        <dt class="col-sm-2">
-            <span>Instructors: </span>
-            @if (Model.Instructors.Any())
-            {
-                @foreach (var instructor in Model.Instructors)
-                {
-                    <p>@instructor.Name</p>
-                }
-            }
-            else
-            {
-                <div class="alert alert-warning" role="alert">
-                    this course not have any instructors yet
-                </div>
-            }
-        </dt>
-        <dt class="col-sm-2">
-            <span>number of student: </span>
-            @if (Model.StudentCourses.Any())
-            {
-                <span>@Model.StudentCourses.Count()</span>
-            }
-            else
-            {
-                <div class="alert alert-warning" role="alert">
-                    this course not have any students yet
-                </div>
-            }
-        </dt>
-    </dl>
-</div>
-<div>
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-</div>
+        }
+        else
+        {
+            <div class="alert alert-warning" role="alert">
+                this course not have any instructors yet
+            </div>
+        }
+    </div>
+
+    <div>
+        <span class="fw-bold">Number Of Students:</span>
+        @if (Model.StudentCourses.Any())
+        {
+            <span class="ms-2">@Model.StudentCourses.Count()</span>
+        }
+        else
+        {
+            <div class="alert alert-warning" role="alert">
+                this course not have any Students yet
+            </div>
+        }
+    </div>
+</section>
+
+<a asp-action="index" class="btn btn-secondary"><i class="bi bi-x-lg"></i> Cancel</a>

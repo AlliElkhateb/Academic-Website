@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Instructor>
+﻿@model IEnumerable<InstructorVM>
 
 @{
     ViewBag.Title = "All Instructors";
@@ -24,6 +24,9 @@
                     Salary
                 </th>
                 <th>
+                    Course
+                </th>
+                <th>
                     Controls
                 </th>
             </tr>
@@ -45,9 +48,21 @@
                         @item.Salary
                     </td>
                     <td>
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Update" asp-route-id="@item.Id">Edit</a> |
-                        <i class="bi bi-trash3"></i><partial name="_Delete" model="@item" />
+                        @if (@item.Course is not null)
+                        {
+                            <span>@item.Course.Name</span>
+                        }
+                        else
+                        {
+                            <span class="alert alert-warning" role="alert">
+                                this instructor not assign to any Course yet
+                            </span>
+                        }
+                    </td>
+                    <td>
+                        <i class="bi bi-ticket-detailed"></i> <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <i class="bi bi-pencil-square"></i> <a asp-action="Update" asp-route-id="@item.Id">Edit</a> |
+                        <i class="bi bi-trash3"></i> <partial name="_Delete" model="@item" />
                     </td>
                 </tr>
             }
@@ -56,9 +71,11 @@
 }
 else
 {
-    <p>there is no data found</p>
+    <div class="alert alert-warning" role="alert">
+        there is no data found
+    </div>
 }
 
 <a asp-action="create" class="btn btn-primary">
-    <i class="bi bi-plus-circle"></i>Add New Instructor
+    <i class="bi bi-plus-lg"></i> Add New Instructor
 </a>
