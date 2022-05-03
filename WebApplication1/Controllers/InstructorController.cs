@@ -55,19 +55,52 @@ namespace WebApplication1.Controllers
 
         //httpPost: check for validation and confirm save data
         [HttpPost]
-        public IActionResult Create([FromForm] InstructorVM newInstructor)
+        [ValidateAntiForgeryToken]
+        public IActionResult Create([FromForm] InstructorVM model)
         {
             //Bind("Name, Age, Address, Salary, Image, CourseId, DepartmentId")
-            if (ModelState.IsValid)
+            model.Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name);   //dropdown list for departments
+            model.Courses = _unitOfWork.CourseRepository.GetAll().OrderBy(x => x.Name);   //dropdown list for course
+
+            if (!ModelState.IsValid)   //check model state
             {
-                var result = _mapper.Map<Instructor>(newInstructor);
-                _unitOfWork.InstructorRepository.Create(result);
-                _unitOfWork.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                return View(model);
             }
-            newInstructor.Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name);
-            newInstructor.Courses = _unitOfWork.CourseRepository.GetAll().OrderBy(x => x.Name);
-            return View(newInstructor);
+
+            var files = Request.Form.Files;   //get files from request
+
+            if (!files.Any())    //check if ther are any files in request
+            {
+                ModelState.AddModelError("image", "you should insert image");
+                return View(model);
+            }
+
+            var img = files.FirstOrDefault();   //get file from request
+
+            using var dataStream = new MemoryStream();   //creates streams that have memory as a backing store instead of a disk or a network connection 
+
+            img.CopyTo(dataStream);    //copy image to stream memory as a backing store
+
+            model.Image = dataStream.ToArray();    //convert file to byte array and save it
+
+            var extentions = new List<string> { ".jpg", ".png" };
+
+            if (!extentions.Contains(Path.GetExtension(img.FileName).ToLower()))    //check file extention
+            {
+                ModelState.AddModelError("image", "only .jpg, .png image are allowed");
+                return View(model);
+            }
+
+            if (img.Length > 2097152)    //check file size
+            {
+                ModelState.AddModelError("image", "image can not be more than 2 MB");
+                return View(model);
+            }
+
+            var result = _mapper.Map<Instructor>(model);
+            _unitOfWork.InstructorRepository.Create(result);
+            _unitOfWork.SaveChanges();
+            return RedirectToAction(nameof(Index));
         }
 
 
@@ -84,18 +117,51 @@ namespace WebApplication1.Controllers
 
         //httpPost: check for validation and confirm save data
         [HttpPost]
-        public IActionResult Update([FromForm] InstructorVM modifiedInstructor)
+        [ValidateAntiForgeryToken]
+        public IActionResult Update([FromForm] InstructorVM model)
         {
-            if (ModelState.IsValid)
+            model.Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name);   //dropdown list for departments
+            model.Courses = _unitOfWork.CourseRepository.GetAll().OrderBy(x => x.Name);   //dropdown list for course
+
+            if (!ModelState.IsValid)   //check model state
             {
-                var result = _mapper.Map<Instructor>(modifiedInstructor);
-                _unitOfWork.InstructorRepository.Update(result);
-                _unitOfWork.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                return View(model);
             }
-            modifiedInstructor.Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name);
-            modifiedInstructor.Courses = _unitOfWork.CourseRepository.GetAll().OrderBy(x => x.Name);
-            return View(modifiedInstructor);
+
+            var files = Request.Form.Files;   //get files from request
+
+            if (!files.Any())    //check if ther are any files in request
+            {
+                ModelState.AddModelError("image", "you should insert image");
+                return View(model);
+            }
+
+            var img = files.FirstOrDefault();    //get file from request
+
+            using var dataStream = new MemoryStream();   //creates streams that have memory as a backing store instead of a disk or a network connection 
+
+            img.CopyTo(dataStream);    //copy image to stream memory as a backing store
+
+            model.Image = dataStream.ToArray();    //convert file to byte array and save it
+
+            var extentions = new List<string> { ".jpg", ".png" };
+
+            if (!extentions.Contains(Path.GetExtension(img.FileName).ToLower()))    //check file extention
+            {
+                ModelState.AddModelError("image", "only .jpg, .png image are allowed");
+                return View(model);
+            }
+
+            if (img.Length > 2097152)    //check file size
+            {
+                ModelState.AddModelError("image", "image can not be more than 2 MB");
+                return View(model);
+            }
+
+            var result = _mapper.Map<Instructor>(model);
+            _unitOfWork.InstructorRepository.Update(result);
+            _unitOfWork.SaveChanges();
+            return RedirectToAction(nameof(Index));
         }
 
 
@@ -109,9 +175,9 @@ namespace WebApplication1.Controllers
                 _unitOfWork.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                ModelState.AddModelError(null, ex.InnerException.Message);
+                ModelState.AddModelError(null, exception.InnerException.Message);
                 return View(nameof(Index));
             }
         }

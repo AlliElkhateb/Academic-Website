@@ -51,18 +51,21 @@ namespace WebApplication1.Controllers
 
         //httpPost: check for validation and confirm save data
         [HttpPost]
-        public IActionResult Create([FromForm] CourseVM newCourse)
+        [ValidateAntiForgeryToken]
+        public IActionResult Create([FromForm] CourseVM model)
         {
             //Bind("Name, MaxDegree, MinDegree, DepartmentId"),
-            if (ModelState.IsValid)
+            model.Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name);
+
+            if (!ModelState.IsValid)
             {
-                var result = _mapper.Map<Course>(newCourse);
-                _unitOfWork.CourseRepository.Create(result);
-                _unitOfWork.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                return View(model);
             }
-            newCourse.Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name);
-            return View(newCourse);
+
+            var result = _mapper.Map<Course>(model);
+            _unitOfWork.CourseRepository.Create(result);
+            _unitOfWork.SaveChanges();
+            return RedirectToAction(nameof(Index));
         }
 
         //httpGet: create view to edit object
@@ -77,17 +80,20 @@ namespace WebApplication1.Controllers
 
         //httpPost: check for validation and confirm save data
         [HttpPost]
-        public IActionResult Update([FromForm] CourseVM modifiedCourse)
+        [ValidateAntiForgeryToken]
+        public IActionResult Update([FromForm] CourseVM model)
         {
-            if (ModelState.IsValid)
+            model.Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name);
+
+            if (!ModelState.IsValid)
             {
-                var result = _mapper.Map<Course>(modifiedCourse);
-                _unitOfWork.CourseRepository.Update(result);
-                _unitOfWork.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                return View(model);
             }
-            modifiedCourse.Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name);
-            return View(modifiedCourse);
+
+            var result = _mapper.Map<Course>(model);
+            _unitOfWork.CourseRepository.Update(result);
+            _unitOfWork.SaveChanges();
+            return RedirectToAction(nameof(Index));
         }
 
 

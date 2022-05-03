@@ -8,52 +8,73 @@
 <hr />
 <h4>Instructor</h4>
 
-<section class="container mb-2">
-
-    <span class="fw-bold">Name:</span>
-    <span class="ms-2">@Model.Name</span>
-    <br />
-
-    <span class="fw-bold">Age:</span>
-    <span class="ms-2">@Model.Age</span>
-    <br />
-
-    <span class="fw-bold">Address:</span>
-    <span class="ms-2">@Model.Address</span>
-    <br />
-
-    <span class="fw-bold">Salary:</span>
-    <span class="ms-2">@Model.Salary</span>
-    <br />
-
-    <div>
-        <span class="fw-bold">Department: </span>
-        @if (@Model.Department is not null)
-        {
-            <span class="ms-2">@Model.Department.Name</span>
-        }
-        else
-        {
-            <div class="alert alert-warning" role="alert">
-                this instructor not assign to any department yet
+<main class="container mb-2">
+    <section class="row justify-content-between">
+        <article class="col-4">
+            <div>
+                <span class="fw-bold">Name:</span>
+                <span class="ms-2">@Model.Name</span>
             </div>
-        }
-    </div>
 
-    <div>
-        <span class="fw-bold">Course: </span>
-        @if (@Model.Course is not null)
-        {
-            <span class="ms-2">@Model.Course.Name</span>
-        }
-        else
-        {
-            <div class="alert alert-warning" role="alert">
-                this instructor not assign to any Course yet
+            <div>
+                <span class="fw-bold">Age:</span>
+                <span class="ms-2">@Model.Age</span>
             </div>
-        }
-    </div>
 
-</section>
+            <div>
+                <span class="fw-bold">Address:</span>
+                <span class="ms-2">@Model.Address</span>
+            </div>
+
+            <div>
+                <span class="fw-bold">Salary:</span>
+                <span class="ms-2">@Model.Salary</span>
+            </div>
+
+            <div>
+                <span class="fw-bold">Department: </span>
+                @if (@Model.Department is not null)
+                {
+                    <span class="ms-2">@Model.Department.Name</span>
+                }
+                else
+                {
+                    <div class="alert alert-warning" role="alert">
+                        this instructor not assign to any department yet
+                    </div>
+                }
+            </div>
+
+            <div>
+                <span class="fw-bold">Course: </span>
+                @if (@Model.Course is not null)
+                {
+                    <span class="ms-2">@Model.Course.Name</span>
+                }
+                else
+                {
+                    <div class="alert alert-warning" role="alert">
+                        this instructor not assign to any Course yet
+                    </div>
+                }
+            </div>
+        </article>
+
+        <article class="col-md-4">
+            @if (Model.Image is not null)
+            {
+                <div id="image-container">
+                    <img src="data:image//*; base64,@(Convert.ToBase64String(Model.Image))" alt="profile picture" style="height: 400px; border-radius: 30px" />
+                </div>
+            }
+            else
+            {
+                <div id="image-container" class="d-none">
+                    <img src="" alt="profile picture" class="img-thumbnail" style="height: 400px; border-radius: 30px" />
+                </div>
+            }
+        </article>
+    </section>
+</main>
 
 <a asp-action="index" class="btn btn-secondary"><i class="bi bi-x-lg"></i> Cancel</a>

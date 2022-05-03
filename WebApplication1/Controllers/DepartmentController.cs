@@ -28,7 +28,6 @@ namespace WebApplication1.Controllers
 
 
         //httpGet: get detail of object
-        [HttpGet(template: "{id:int}")]
         public IActionResult Details([FromRoute] int id)
         {
             var department = _unitOfWork.DepartmentRepository.Find(x => x.Id == id);
@@ -51,17 +50,19 @@ namespace WebApplication1.Controllers
 
         //httpPost: check for validation and confirm save data
         [HttpPost]
-        public IActionResult Create([FromForm] DepartmentVM newDepartment)
+        [ValidateAntiForgeryToken]
+        public IActionResult Create([FromForm] DepartmentVM model)
         {
             //Bind("Name, Manager")
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var result = _mapper.Map<Department>(newDepartment);
-                _unitOfWork.DepartmentRepository.Create(result);
-                _unitOfWork.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                return View(model);
             }
-            return View(newDepartment);
+
+            var result = _mapper.Map<Department>(model);
+            _unitOfWork.DepartmentRepository.Create(result);
+            _unitOfWork.SaveChanges();
+            return RedirectToAction(nameof(Index));
         }
 
 
@@ -76,16 +77,18 @@ namespace WebApplication1.Controllers
 
         //httpPost: check for validation and confirm save data
         [HttpPost]
-        public IActionResult Update([FromForm] DepartmentVM modifiedDepartment)
+        [ValidateAntiForgeryToken]
+        public IActionResult Update([FromForm] DepartmentVM model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var result = _mapper.Map<Department>(modifiedDepartment);
-                _unitOfWork.DepartmentRepository.Update(result);
-                _unitOfWork.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                return View(model);
             }
-            return View(modifiedDepartment);
+
+            var result = _mapper.Map<Department>(model);
+            _unitOfWork.DepartmentRepository.Update(result);
+            _unitOfWork.SaveChanges();
+            return RedirectToAction(nameof(Index));
         }
 
 

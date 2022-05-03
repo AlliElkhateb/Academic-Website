@@ -32,5 +32,7 @@ namespace WebAppRepositoryWithUOW.Core.ViewModel
 
 
         public IEnumerable<StudentCourse>? StudentCourses { get; set; }
+
+        public IEnumerable<Course>? Courses { get; set; }
     }
 }

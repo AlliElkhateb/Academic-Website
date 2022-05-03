@@ -36,7 +36,14 @@ namespace WebApplication1.Controllers
             var student = _unitOfWork.StudentRepository.Find(x => x.Id == id);
             var result = _mapper.Map<StudentVM>(student);
             result.Department = _unitOfWork.DepartmentRepository.Find(x => x.Id == student.DepartmentId);
-            //result.StudentCourses = _unitOfWork.StudentCourseRepository.GetAll(x => x.StudentId == student.Id, x => x.Course);
+
+            result.StudentCourses = _unitOfWork.StudentCourseRepository.GetAll(x => x.StudentId == id);
+            var listOfCourses = new List<Course>();
+            foreach (var course in result.StudentCourses)
+            {
+                listOfCourses.Add(_unitOfWork.CourseRepository.Find(c => c.Id == course.CourseId));
+            }
+            result.Courses = listOfCourses;
             return View(result);
         }
 
@@ -46,7 +53,7 @@ namespace WebApplication1.Controllers
         {
             var newStudent = new StudentVM
             {
-                Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name)
+                Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name),
             };
             return View(newStudent);
         }
@@ -54,18 +61,52 @@ namespace WebApplication1.Controllers
 
         //httpPost: check for validation and confirm save data
         [HttpPost]
-        public IActionResult Create([FromForm] StudentVM newStudent)
+        [ValidateAntiForgeryToken]
+        public IActionResult Create([FromForm] StudentVM model)
         {
             //Bind("Name, MaxDegree, MinDegree, DepartmentId"),
-            if (ModelState.IsValid)
+
+             model.Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name);   //dropdown list of departments
+
+            if (!ModelState.IsValid)   //check model state
             {
-                var result = _mapper.Map<Student>(newStudent);
-                _unitOfWork.StudentRepository.Create(result);
-                _unitOfWork.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                return View(model);
             }
-            newStudent.Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name);
-            return View(newStudent);
+
+            var files = Request.Form.Files;   //get files from request
+
+            if (!files.Any())    //check if ther are any files in request
+            {
+                ModelState.AddModelError("image", "you should insert image");
+                return View(model);
+            }
+
+            var img = files.FirstOrDefault();    //get file from request
+
+            using var dataStream = new MemoryStream();   //creates streams that have memory as a backing store instead of a disk or a network connection 
+
+            img.CopyTo(dataStream);    //copy image to stream memory as a backing store
+
+            model.Image = dataStream.ToArray();     //convert file to byte array and save it
+
+            var extentions = new List<string> { ".jpg", ".png" };
+
+            if (!extentions.Contains(Path.GetExtension(img.FileName).ToLower()))    //check file extention
+            {
+                ModelState.AddModelError("image", "only .jpg, .png image are allowed");
+                return View(model);
+            }
+
+            if (img.Length > 2097152)    //check file size
+            {
+                ModelState.AddModelError("image", "image can not be more than 2 MB");
+                return View(model);
+            }
+
+            var result = _mapper.Map<Student>(model);
+            _unitOfWork.StudentRepository.Create(result);
+            _unitOfWork.SaveChanges();
+            return RedirectToAction(nameof(Index));
         }
 
         //httpGet: create view to edit object
@@ -80,17 +121,50 @@ namespace WebApplication1.Controllers
 
         //httpPost: check for validation and confirm save data
         [HttpPost]
-        public IActionResult Update([FromForm] StudentVM modifiedStudent)
+        [ValidateAntiForgeryToken]
+        public IActionResult Update([FromForm] StudentVM model)
         {
-            if (ModelState.IsValid)
+            model.Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name);   //dropdown list of departments
+
+            if (!ModelState.IsValid)   //check model state
             {
-                var result = _mapper.Map<Student>(modifiedStudent);
-                _unitOfWork.StudentRepository.Update(result);
-                _unitOfWork.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                return View(model);
             }
-            modifiedStudent.Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name);
-            return View(modifiedStudent);
+
+            var files = HttpContext.Request.Form.Files;    //get files from request
+
+            if (!files.Any())    //check if ther are any files in request
+            {
+                ModelState.AddModelError("image", "you should insert image");
+                return View(model);
+            }
+
+            var img = files.FirstOrDefault();   //get file from request
+
+            using var dataStream = new MemoryStream();   //creates streams that have memory as a backing store instead of a disk or a network connection 
+
+            img.CopyTo(dataStream);   //copy image to stream memory as a backing store
+
+            model.Image = dataStream.ToArray();   //convert file to byte array and save it
+
+            var extentions = new List<string> { ".jpg", ".png" };
+
+            if (!extentions.Contains(Path.GetExtension(img.FileName).ToLower()))   //check file extention
+            {
+                ModelState.AddModelError("image", "only .jpg, .png image are allowed");
+                return View(model);
+            }
+
+            if (img.Length > 2097152)   //check file size
+            {
+                ModelState.AddModelError("image", "image can not be more than 2 MB");
+                return View(model);
+            }
+
+            var result = _mapper.Map<Student>(model);
+            _unitOfWork.StudentRepository.Update(result);
+            _unitOfWork.SaveChanges();
+            return RedirectToAction(nameof(Index));
         }
 
 
