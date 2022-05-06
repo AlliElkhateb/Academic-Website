@@ -22,8 +22,8 @@ namespace WebApplication1.Controllers
         public IActionResult Index()
         {
             var departments = _unitOfWork.DepartmentRepository.GetAll();
-            var result = _mapper.Map<IEnumerable<DepartmentVM>>(departments).OrderBy(x => x.Name);
-            return View(result);
+            var model = _mapper.Map<IEnumerable<DepartmentVM>>(departments).OrderBy(x => x.Name);
+            return View(model);
         }
 
 
@@ -31,20 +31,20 @@ namespace WebApplication1.Controllers
         public IActionResult Details([FromRoute] int id)
         {
             var department = _unitOfWork.DepartmentRepository.Find(x => x.Id == id);
-            var result = _mapper.Map<DepartmentVM>(department);
-            result.Courses = _unitOfWork.CourseRepository.GetAll(x => x.DepartmentId == department.Id);
-            result.Instructors = _unitOfWork.InstructorRepository.GetAll(x => x.DepartmentId == department.Id);
-            result.Students = _unitOfWork.StudentRepository.GetAll(x => x.DepartmentId == department.Id);
-            //return PartialView(result);
-            return View(result);
+            var model = _mapper.Map<DepartmentVM>(department);
+            model.Courses = _unitOfWork.CourseRepository.GetAll(x => x.DepartmentId == department.Id);
+            model.Instructors = _unitOfWork.InstructorRepository.GetAll(x => x.DepartmentId == department.Id);
+            model.Students = _unitOfWork.StudentRepository.GetAll(x => x.DepartmentId == department.Id);
+            //return PartialView(model);
+            return View(model);
         }
 
 
         //httpGet: create view to add new object
         public IActionResult Create()
         {
-            var newDepartment = new DepartmentVM();
-            return View(newDepartment);
+            var model = new DepartmentVM();
+            return View(model);
         }
 
 
@@ -59,9 +59,9 @@ namespace WebApplication1.Controllers
                 return View(model);
             }
 
-            var result = _mapper.Map<Department>(model);
-            _unitOfWork.DepartmentRepository.Create(result);
-            _unitOfWork.SaveChanges();
+            var obj = _mapper.Map<Department>(model);
+            _unitOfWork.DepartmentRepository.Create(obj);
+            _unitOfWork.Commit();
             return RedirectToAction(nameof(Index));
         }
 
@@ -70,8 +70,8 @@ namespace WebApplication1.Controllers
         public IActionResult Update([FromRoute] int id)
         {
             var department = _unitOfWork.DepartmentRepository.Find(x => x.Id == id);
-            var result = _mapper.Map<DepartmentVM>(department);
-            return View(result);
+            var model = _mapper.Map<DepartmentVM>(department);
+            return View(model);
         }
 
 
@@ -85,21 +85,21 @@ namespace WebApplication1.Controllers
                 return View(model);
             }
 
-            var result = _mapper.Map<Department>(model);
-            _unitOfWork.DepartmentRepository.Update(result);
-            _unitOfWork.SaveChanges();
+            var obj = _mapper.Map<Department>(model);
+            _unitOfWork.DepartmentRepository.Update(obj);
+            _unitOfWork.Commit();
             return RedirectToAction(nameof(Index));
         }
 
 
-        //httpGet: delete
+        //delete object from database
         public IActionResult Delete([FromRoute] int id)
         {
             try
             {
-                var department = new Department { Id = id };
-                _unitOfWork.DepartmentRepository.Delete(department);
-                _unitOfWork.SaveChanges();
+                var obj = new Department { Id = id };
+                _unitOfWork.DepartmentRepository.Delete(obj);
+                _unitOfWork.Commit();
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception exception)

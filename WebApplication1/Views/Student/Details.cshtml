@@ -8,92 +8,74 @@
 <hr />
 <h4>Student</h4>
 
-<main class="container mb-2">
-    <section class="row justify-content-between">
-        <article class="col-4">
-            <div>
-                <span class="fw-bold">Name:</span>
-                <span class="ms-2">@Model.Name</span>
-            </div>
+<section class="container mb-2">
+    <article class="col-4">
+        <div>
+            <span class="fw-bold">Name:</span>
+            <span class="ms-2">@Model.Name</span>
+        </div>
 
-            <div>
-                <span class="fw-bold">Age:</span>
-                <span class="ms-2">@Model.Age</span>
-            </div>
+        <div>
+            <span class="fw-bold">Age:</span>
+            <span class="ms-2">@Model.Age</span>
+        </div>
 
-            <div>
-                <span class="fw-bold">Address:</span>
-                <span class="ms-2">@Model.Address</span>
-            </div>
+        <div>
+            <span class="fw-bold">Address:</span>
+            <span class="ms-2">@Model.Address</span>
+        </div>
 
-            <div>
-                <span class="fw-bold me-2">Department: </span>
-                @if (@Model.Department is not null)
-                {
-                    <span>@Model.Department.Name</span>
-                }
-                else
-                {
-                    <div class="alert alert-warning" role="alert">
-                        this student not assign to any department yet
-                    </div>
-                }
-            </div>
-
-            @if (@Model.Courses.Any())
+        <div>
+            <span class="fw-bold me-2">Department: </span>
+            @if (@Model.Department is not null)
             {
-                <table class="table">
-                    <thead>
+                <span>@Model.Department.Name</span>
+            }
+            else
+            {
+                <div class="alert alert-warning" role="alert">
+                    this student not assign to any department yet
+                </div>
+            }
+        </div>
+
+        @if (@Model.Courses.Any())
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Course</th>
+                        <th>Degree</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var course in Model.Courses)
+                    {
                         <tr>
-                            <th>Course</th>
-                            <th>Degree</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var course in Model.Courses)
-                        {
-                            <tr>
-                                <td>@course.Name</td>
-                                @foreach (var studentWithCourse in Model.StudentCourses)
+                            <td>@course.Name</td>
+                            @foreach (var studentWithCourse in Model.StudentCourses)
+                            {
+                                if (course.Id == studentWithCourse.CourseId)
                                 {
-                                    if (course.Id == studentWithCourse.CourseId)
-                                    {
-                                        <td>@studentWithCourse.StudentDegree</td>
-                                    }
+                                    <td>@studentWithCourse.StudentDegree</td>
                                 }
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            }
-            else
-            {
-                <div>
-                    <span class="fw-bold me-2">Courses: </span>
-                    <div class="alert alert-warning" role="alert">
-                        this student not assign to any course yet
-                    </div>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div>
+                <span class="fw-bold me-2">Courses: </span>
+                <div class="alert alert-warning" role="alert">
+                    this student not assign to any course yet
                 </div>
-            }
-        </article>
-
-        <article class="col-md-4">
-            @if (Model.Image is not null)
-            {
-                <div id="image-container">
-                    <img src="data:image//*; base64,@(Convert.ToBase64String(Model.Image))" alt="profile picture" style="height: 400px; border-radius: 30px" />
-                </div>
-            }
-            else
-            {
-                <div id="image-container" class="d-none">
-                    <img src="" alt="profile picture" class="img-thumbnail" style="height: 400px; border-radius: 30px" />
-                </div>
-            }
-        </article>
-
-    </section>
-</main>
+            </div>
+        }
+    </article>
+</section>
 
 <a asp-action="index" class="btn btn-secondary"><i class="bi bi-x-lg"></i> Cancel</a>
 

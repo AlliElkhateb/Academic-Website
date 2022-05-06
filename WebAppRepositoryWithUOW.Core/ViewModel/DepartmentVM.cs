@@ -19,13 +19,8 @@ namespace WebAppRepositoryWithUOW.Core.ViewModel
          Display(Name = "Manager Name")]
         public string Manager { get; set; }
 
-
         public IEnumerable<Student>? Students { get; set; }
-
-
         public IEnumerable<Instructor>? Instructors { get; set; }
-
-
         public IEnumerable<Course>? Courses { get; set; }
     }
 }

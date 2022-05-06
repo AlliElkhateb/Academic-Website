@@ -9,13 +9,9 @@ namespace WebApplication1.MapperProfile
         public MapperProfile()
         {
             CreateMap<Course, CourseVM>().ReverseMap();
-
             CreateMap<Department, DepartmentVM>().ReverseMap();
-
             CreateMap<Instructor, InstructorVM>().ReverseMap();
-
             CreateMap<Student, StudentVM>().ReverseMap();
-
             CreateMap<StudentCourse, StudentCourseVM>().ReverseMap();
         }
     }

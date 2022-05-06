@@ -1,0 +1,47 @@
+﻿@model IEnumerable<IdentityRole>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<partial name="_Create" model="new RolesVM()" />
+
+@if (Model.Any())
+{
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <table class="table mt-4">
+        <thead>
+            <tr class="table-secondary">
+                <th>
+                    Role Name
+                </th>
+                <th>
+                    Controle
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var role in Model)
+            {
+                <tr class="table-light">
+                    <td >
+                        @role.Name
+                    </td>
+                    <td>
+                        <i class="bi bi-trash3"></i> <partial name="_Delete" model="@role" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p class="mt-4">no data inserted</p>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

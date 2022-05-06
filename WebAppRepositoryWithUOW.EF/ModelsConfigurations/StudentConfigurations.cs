@@ -8,19 +8,13 @@ namespace WebAppRepositoryWithUOW.EF.ModelsConfigurations
     {
         public void Configure(EntityTypeBuilder<Student> builder)
         {
-            builder
-                .HasKey(x => x.Id);
-
-            builder
-                .Property(x => x.Name)
+            builder.Property(x => x.Name)
                 .HasMaxLength(50);
 
-            builder
-                .Property(x => x.Address)
+            builder.Property(x => x.Address)
                 .HasMaxLength(150);
 
-            builder
-                .HasOne(x => x.Department)
+            builder.HasOne(x => x.Department)
                 .WithMany(x => x.Students)
                 .HasForeignKey(x => x.DepartmentId)
                 .OnDelete(DeleteBehavior.Restrict);

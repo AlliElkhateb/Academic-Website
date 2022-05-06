@@ -23,11 +23,7 @@ namespace WebAppRepositoryWithUOW.Core.ViewModel
         public int DepartmentId { get; set; }
         public Department? Department { get; set; }
         public IEnumerable<Department>? Departments { get; set; }
-
-
         public IEnumerable<StudentCourse>? StudentCourses { get; set; }
-
-
         public IEnumerable<Instructor>? Instructors { get; set; }
     }
 }

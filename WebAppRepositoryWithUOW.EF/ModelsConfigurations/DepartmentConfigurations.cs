@@ -8,15 +8,10 @@ namespace WebAppRepositoryWithUOW.EF.ModelsConfigurations
     {
         public void Configure(EntityTypeBuilder<Department> builder)
         {
-            builder
-                .HasKey(x => x.Id);
-
-            builder
-                .Property(x => x.Name)
+            builder.Property(x => x.Name)
                 .HasMaxLength(50);
 
-            builder
-                .Property(x => x.Manager)
+            builder.Property(x => x.Manager)
                 .HasMaxLength(50);
         }
     }

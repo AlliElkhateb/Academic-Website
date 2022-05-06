@@ -17,9 +17,6 @@ namespace WebAppRepositoryWithUOW.Core.ViewModel
         public int Age { get; set; }
 
 
-        public byte[]? Image { get; set; }
-
-
         [Required(ErrorMessage = "Address is required"),
          MaxLength(length: 150, ErrorMessage = "Address must be less than 150 character")]
         public string Address { get; set; }
@@ -29,10 +26,7 @@ namespace WebAppRepositoryWithUOW.Core.ViewModel
         public int DepartmentId { get; set; }
         public Department? Department { get; set; }
         public IEnumerable<Department>? Departments { get; set; }
-
-
         public IEnumerable<StudentCourse>? StudentCourses { get; set; }
-
         public IEnumerable<Course>? Courses { get; set; }
     }
 }

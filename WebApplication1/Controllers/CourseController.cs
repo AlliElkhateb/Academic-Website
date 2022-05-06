@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebAppRepositoryWithUOW.Core;
 using WebAppRepositoryWithUOW.Core.Models;
@@ -18,11 +19,12 @@ namespace WebApplication1.Controllers
 
 
         //httpGet: get all departments
+        [Authorize]
         public IActionResult Index()
         {
             var courses = _unitOfWork.CourseRepository.GetAll();
-            var result = _mapper.Map<IEnumerable<CourseVM>>(courses).OrderBy(x => x.Name);
-            return View(result);
+            var model = _mapper.Map<IEnumerable<CourseVM>>(courses).OrderBy(x => x.Name);
+            return View(model);
         }
 
 
@@ -30,22 +32,22 @@ namespace WebApplication1.Controllers
         public IActionResult Details([FromRoute] int id)
         {
             var course = _unitOfWork.CourseRepository.Find(x => x.Id == id);
-            var result = _mapper.Map<CourseVM>(course);
-            result.Instructors = _unitOfWork.InstructorRepository.GetAll(x => x.CourseId == course.Id).OrderBy(x => x.Name);
-            result.Department = _unitOfWork.DepartmentRepository.Find(x => x.Id == course.DepartmentId);
-            result.StudentCourses = _unitOfWork.StudentCourseRepository.GetAll(x => x.CourseId == course.Id);
-            return View(result);
+            var model = _mapper.Map<CourseVM>(course);
+            model.Instructors = _unitOfWork.InstructorRepository.GetAll(x => x.CourseId == course.Id).OrderBy(x => x.Name);
+            model.Department = _unitOfWork.DepartmentRepository.Find(x => x.Id == course.DepartmentId);
+            model.StudentCourses = _unitOfWork.StudentCourseRepository.GetAll(x => x.CourseId == course.Id);
+            return View(model);
         }
 
 
         //httpGet: create view to add new object
         public IActionResult Create()
         {
-            var newCourse = new CourseVM
+            var model = new CourseVM
             {
                 Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name)
             };
-            return View(newCourse);
+            return View(model);
         }
 
 
@@ -62,9 +64,9 @@ namespace WebApplication1.Controllers
                 return View(model);
             }
 
-            var result = _mapper.Map<Course>(model);
-            _unitOfWork.CourseRepository.Create(result);
-            _unitOfWork.SaveChanges();
+            var obj = _mapper.Map<Course>(model);
+            _unitOfWork.CourseRepository.Create(obj);
+            _unitOfWork.Commit();
             return RedirectToAction(nameof(Index));
         }
 
@@ -72,9 +74,9 @@ namespace WebApplication1.Controllers
         public IActionResult Update([FromRoute] int id)
         {
             var course = _unitOfWork.CourseRepository.Find(x => x.Id == id);
-            var result = _mapper.Map<CourseVM>(course);
-            result.Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name);
-            return View(result);
+            var model = _mapper.Map<CourseVM>(course);
+            model.Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name);
+            return View(model);
         }
 
 
@@ -90,21 +92,21 @@ namespace WebApplication1.Controllers
                 return View(model);
             }
 
-            var result = _mapper.Map<Course>(model);
-            _unitOfWork.CourseRepository.Update(result);
-            _unitOfWork.SaveChanges();
+            var obj = _mapper.Map<Course>(model);
+            _unitOfWork.CourseRepository.Update(obj);
+            _unitOfWork.Commit();
             return RedirectToAction(nameof(Index));
         }
 
 
-        //httpGet: delete
+        //delete object from database
         public IActionResult Delete([FromRoute] int id)
         {
             try
             {
-                var course = new Course { Id = id };
-                _unitOfWork.CourseRepository.Delete(course);
-                _unitOfWork.SaveChanges();
+                var obj = new Course { Id = id };
+                _unitOfWork.CourseRepository.Delete(obj);
+                _unitOfWork.Commit();
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception exception)

@@ -1,0 +1,68 @@
+﻿@inject UserManager<AppUser> _userManager
+@inject SignInManager<AppUser> _signInManager
+
+<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <div class="container-fluid">
+        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WebApplication1</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+            <ul class="navbar-nav flex-grow-1">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-controller="Department" asp-action="index">Department</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-controller="Instructor" asp-action="index">Instructor</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-controller="Course" asp-action="index">Course</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-controller="Student" asp-action="index">Student</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-controller="StudentCourse" asp-action="index">Student Courses</a>
+                </li>
+                @if (User.IsInRole("Admin"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-controller="Role" asp-action="index">Roles</a>
+                    </li>
+                }
+            </ul>
+            <ul class="navbar-nav">
+                @*(!User.Identity.IsAuthenticated)*@
+
+                @if (!_signInManager.IsSignedIn(User))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-controller="account" asp-action="Registration">Registration</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-controller="account" asp-action="Login">login</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item mt-2 me-2">
+                        Welcome @User.Identity.Name
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-controller="account" asp-action="EditProfile" asp-route-id="@_userManager.GetUserAsync(User).Result.Id">Edit Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-controller="account" asp-action="Logout">Log out</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-controller="account" asp-action="Profile" asp-route-id="@_userManager.GetUserAsync(User).Result.Id">Profile</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</nav>

@@ -7,7 +7,6 @@ namespace WebAppRepositoryWithUOW.EF.Repository
     public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
         private readonly AppDbContext _context;
-
         public BaseRepository(AppDbContext context)
         {
             _context = context;
