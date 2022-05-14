@@ -1,4 +1,4 @@
-﻿namespace WebAppRepositoryWithUOW.Core.Models
+﻿namespace WebAppRepositoryWithUOW.Core
 {
     public class InstructorWithStudent
     {

@@ -1,10 +1,10 @@
 ﻿<a asp-action="Delete" asp-route-id="@Model.Id" onclick="confirmDelete(event)" class="text-decoration-none">Delete</a>
-@*class="btn btn-danger"*@
+
 <script>
     function confirmDelete(event) {
-      var decision = confirm("are you sure?");
-      if (decision == false) {
-        event.preventDefault();
-      }
+        var decision = confirm("are you sure?");
+        if (decision == false) {
+            event.preventDefault();
+        }
     }
 </script>

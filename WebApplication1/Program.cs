@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using WebAppRepositoryWithUOW.Core;
-using WebAppRepositoryWithUOW.EF;
+using WebAppRepositoryWithUOW.EF.Data;
 using WebAppRepositoryWithUOW.EF.IdentityModels;
+using WebAppRepositoryWithUOW.EF.UnitOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
 

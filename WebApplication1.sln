@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{D97BD49C-B8D2-46A6-94B7-91615B674BC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{D97BD49C-B8D2-46A6-94B7-91615B674BC4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAppRepositoryWithUOW.Core", "WebAppRepositoryWithUOW.Core\WebAppRepositoryWithUOW.Core.csproj", "{F8D9E334-ECC1-4BD8-BDE4-69A493A372D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAppRepositoryWithUOW.Core", "WebAppRepositoryWithUOW.Core\WebAppRepositoryWithUOW.Core.csproj", "{F8D9E334-ECC1-4BD8-BDE4-69A493A372D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAppRepositoryWithUOW.EF", "WebAppRepositoryWithUOW.EF\WebAppRepositoryWithUOW.EF.csproj", "{9BF52E99-1305-4E52-BCD7-3CA7977F64F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAppRepositoryWithUOW.EF", "WebAppRepositoryWithUOW.EF\WebAppRepositoryWithUOW.EF.csproj", "{9BF52E99-1305-4E52-BCD7-3CA7977F64F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

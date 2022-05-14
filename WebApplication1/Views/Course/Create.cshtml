@@ -6,7 +6,7 @@
     SelectList selectList;
     if (Model is not null)
     {
-        selectList = new(Model.Departments, "Id", "Name", Model.DepartmentId);
+        selectList = new(Model.Departments, "Id", "Name", Model.Course.DepartmentId);
     }
     else
     {
@@ -23,29 +23,29 @@
         <form asp-action="create" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <input type="hidden" asp-for="Id" class="form-control" />
+                <input type="hidden" asp-for="Course.Id" class="form-control" />
             </div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label asp-for="Course.Name" class="control-label"></label>
+                <input asp-for="Course.Name" class="form-control" />
+                <span asp-validation-for="Course.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="MaxDegree"></label>
-                <input asp-for="MaxDegree" class="form-control" value="" />
-                <span class="text-danger" asp-validation-for="MaxDegree"></span>
+                <label asp-for="Course.MaxDegree"></label>
+                <input asp-for="Course.MaxDegree" class="form-control" value="" />
+                <span class="text-danger" asp-validation-for="Course.MaxDegree"></span>
             </div>
             <div class="form-group">
-                <label asp-for="MinDegree"></label>
-                <input asp-for="MinDegree" class="form-control" value="" />
-                <span class="text-danger" asp-validation-for="MinDegree"></span>
+                <label asp-for="Course.MinDegree"></label>
+                <input asp-for="Course.MinDegree" class="form-control" value="" />
+                <span class="text-danger" asp-validation-for="Course.MinDegree"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DepartmentId"></label>
-                <select asp-for="DepartmentId" asp-items="selectList" class="form-select">
+                <label asp-for="Course.DepartmentId"></label>
+                <select asp-for="Course.DepartmentId" asp-items="selectList" class="form-select">
                     <option>select department</option>
                 </select>
-                <span class="text-danger" asp-validation-for="DepartmentId"></span>
+                <span class="text-danger" asp-validation-for="Course.DepartmentId"></span>
             </div>
             <div class="form-group mt-2">
                 <button type="submit" class="btn btn-success me-2">
@@ -58,5 +58,5 @@
 </div>
 
 @section Scripts{
-<partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
 }

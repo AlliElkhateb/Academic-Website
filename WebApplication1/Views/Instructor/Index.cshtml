@@ -1,4 +1,4 @@
-﻿@model IEnumerable<InstructorVM>
+﻿@model IEnumerable<Instructor>
 
 @{
     ViewBag.Title = "All Instructors";
@@ -33,25 +33,25 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var obj in Model)
             {
                 <tr>
                     <td>
-                        @item.Name
+                        @obj.Name
                     </td>
                     <td>
-                        @item.Age
+                        @obj.Age
                     </td>
                     <td>
-                        @item.Address
+                        @obj.Address
                     </td>
                     <td>
-                        @item.Salary
+                        @obj.Salary
                     </td>
                     <td>
-                        @if (@item.Course is not null)
+                        @if (@obj.Course is not null)
                         {
-                            <span>@item.Course.Name</span>
+                            <span>@obj.Course.Name</span>
                         }
                         else
                         {
@@ -61,9 +61,9 @@
                         }
                     </td>
                     <td>
-                        <i class="bi bi-ticket-detailed"></i> <a asp-action="Details" asp-route-id="@item.Id" class="text-decoration-none">Details</a> |
-                        <i class="bi bi-pencil-square"></i> <a asp-action="Update" asp-route-id="@item.Id" class="text-decoration-none">Edit</a> |
-                        <i class="bi bi-trash3"></i> <partial name="_Delete" model="@item" />
+                        <i class="bi bi-ticket-detailed"></i> <a asp-action="Details" asp-route-id="@obj.Id" class="text-decoration-none">Details</a> |
+                        <i class="bi bi-pencil-square"></i> <a asp-action="Update" asp-route-id="@obj.Id" class="text-decoration-none">Edit</a> |
+                        <i class="bi bi-trash3"></i> <partial name="_Delete" model="@obj" />
                     </td>
                 </tr>
             }

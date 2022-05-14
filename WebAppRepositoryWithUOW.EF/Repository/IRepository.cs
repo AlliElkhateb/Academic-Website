@@ -1,8 +1,8 @@
 ﻿using System.Linq.Expressions;
 
-namespace WebAppRepositoryWithUOW.Core.IRepository
+namespace WebAppRepositoryWithUOW.EF.Repository
 {
-    public interface IBaseRepository<T> where T : class
+    public interface IRepository<T> where T : class
     {
         // get all objects
         IEnumerable<T> GetAll();
@@ -17,10 +17,10 @@ namespace WebAppRepositoryWithUOW.Core.IRepository
         IEnumerable<T> GetAll(Expression<Func<T, bool>> selector, params Expression<Func<T, object>>[] navigationProperties);
 
         //get object with specific condition
-        T Find(Expression<Func<T, bool>> selector);
+        T GetObj(Expression<Func<T, bool>> selector);
 
         //get object with specific condition with include
-        T Find(Expression<Func<T, bool>> selector, params Expression<Func<T, object>>[] navigationProperties);
+        T GetObj(Expression<Func<T, bool>> selector, params Expression<Func<T, object>>[] navigationProperties);
 
         //add new object
         void Create(T entity);

@@ -71,17 +71,17 @@
 </section>
 
 @section Scripts {
-<partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
 
-<script>
-    $(document).ready(function () {
-        $("#ProfilePicture").on("change", function (){
-            console.log($(this).val().split("\\").at(-1));
-            var imageSrc = window.URL.createObjectURL(this.files[0]);
-            var imageContainer = $("#image-container");
-            imageContainer.removeClass("d-none");
-            imageContainer.find("img").attr("src", imageSrc);
-        })
-    });
-</script>
+    <script>
+        $(document).ready(function() {
+            $("#ProfilePicture").on("change", function() {
+                console.log($(this).val().split("\\").at(-1));
+                var imageSrc = window.URL.createObjectURL(this.files[0]);
+                var imageContainer = $("#image-container");
+                imageContainer.removeClass("d-none");
+                imageContainer.find("img").attr("src", imageSrc);
+            })
+        });
+    </script>
 }

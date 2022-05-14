@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using WebAppRepositoryWithUOW.Core;
-using WebAppRepositoryWithUOW.Core.Models;
 using WebAppRepositoryWithUOW.Core.ViewModel;
+using WebAppRepositoryWithUOW.EF.UnitOfWork;
 
 namespace WebApplication1.Controllers
 {
@@ -46,13 +46,13 @@ namespace WebApplication1.Controllers
 
         public IActionResult SetStudentsDegrees([FromRoute] int id, [FromRoute] int courseId)
         {
-            var instructor = _unitOfWork.InstructorRepository.Find(x => x.Id == id);
+            var instructor = _unitOfWork.InstructorRepository.GetObj(x => x.Id == id);
             var students = _unitOfWork.StudentCourseRepository.GetAll(x => x.CourseId == courseId);
             var model = _mapper.Map<InstructorVM>(students);
             var studentList = new List<Student>();
             foreach (var student in students)
             {
-                studentList.Add(_unitOfWork.StudentRepository.Find(x => x.Id == student.StudentId));
+                studentList.Add(_unitOfWork.StudentRepository.GetObj(x => x.Id == student.StudentId));
             }
             model.Students = studentList;
             return View(model);

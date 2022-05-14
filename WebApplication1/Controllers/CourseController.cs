@@ -1,20 +1,17 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebAppRepositoryWithUOW.Core;
-using WebAppRepositoryWithUOW.Core.Models;
 using WebAppRepositoryWithUOW.Core.ViewModel;
+using WebAppRepositoryWithUOW.EF.UnitOfWork;
 
 namespace WebApplication1.Controllers
 {
     public class CourseController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        public CourseController(IUnitOfWork unitOfWork, IMapper mapper)
+        public CourseController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _mapper = mapper;
         }
 
 
@@ -22,21 +19,33 @@ namespace WebApplication1.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            var courses = _unitOfWork.CourseRepository.GetAll();
-            var model = _mapper.Map<IEnumerable<CourseVM>>(courses).OrderBy(x => x.Name);
-            return View(model);
+            var courses = _unitOfWork.CourseRepository.GetAll().OrderBy(x => x.Name);
+
+            if (courses is null)
+            {
+                return NotFound("no datat found");
+            }
+            //var model = _mapper.Map<IEnumerable<CourseVM>>(courses);
+            return View(courses);
         }
 
 
         //httpGet: get detail of object
         public IActionResult Details([FromRoute] int id)
         {
-            var course = _unitOfWork.CourseRepository.Find(x => x.Id == id);
-            var model = _mapper.Map<CourseVM>(course);
-            model.Instructors = _unitOfWork.InstructorRepository.GetAll(x => x.CourseId == course.Id).OrderBy(x => x.Name);
-            model.Department = _unitOfWork.DepartmentRepository.Find(x => x.Id == course.DepartmentId);
-            model.StudentCourses = _unitOfWork.StudentCourseRepository.GetAll(x => x.CourseId == course.Id);
-            return View(model);
+            var course = new CourseVM
+            {
+                Course = _unitOfWork.CourseRepository.GetObj(x => x.Id == id, x => x.Department),
+                Instructors = _unitOfWork.InstructorRepository.GetAll(x => x.CourseId == id).OrderBy(x => x.Name),
+                StudentCourses = _unitOfWork.StudentCourseRepository.GetAll(x => x.CourseId == id)
+            };
+
+            if (course.Course is null)
+            {
+                return NotFound("invalid id");
+            }
+
+            return View(course);
         }
 
 
@@ -45,6 +54,7 @@ namespace WebApplication1.Controllers
         {
             var model = new CourseVM
             {
+                Course = new Course(),
                 Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name)
             };
             return View(model);
@@ -57,25 +67,32 @@ namespace WebApplication1.Controllers
         public IActionResult Create([FromForm] CourseVM model)
         {
             //Bind("Name, MaxDegree, MinDegree, DepartmentId"),
-            model.Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name);
 
             if (!ModelState.IsValid)
             {
+                model.Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name);
                 return View(model);
             }
 
-            var obj = _mapper.Map<Course>(model);
-            _unitOfWork.CourseRepository.Create(obj);
-            _unitOfWork.Commit();
+            _unitOfWork.CourseRepository.Create(model.Course);
+            _unitOfWork.Save();
             return RedirectToAction(nameof(Index));
         }
 
         //httpGet: create view to edit object
         public IActionResult Update([FromRoute] int id)
         {
-            var course = _unitOfWork.CourseRepository.Find(x => x.Id == id);
-            var model = _mapper.Map<CourseVM>(course);
-            model.Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name);
+            var model = new CourseVM
+            {
+                Course = _unitOfWork.CourseRepository.GetObj(x => x.Id == id),
+                Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name)
+            };
+
+            if (model.Course is null)
+            {
+                return NotFound("invalid id");
+            }
+
             return View(model);
         }
 
@@ -85,16 +102,14 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Update([FromForm] CourseVM model)
         {
-            model.Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name);
-
             if (!ModelState.IsValid)
             {
+                model.Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name);
                 return View(model);
             }
 
-            var obj = _mapper.Map<Course>(model);
-            _unitOfWork.CourseRepository.Update(obj);
-            _unitOfWork.Commit();
+            _unitOfWork.CourseRepository.Update(model.Course);
+            _unitOfWork.Save();
             return RedirectToAction(nameof(Index));
         }
 
@@ -104,15 +119,19 @@ namespace WebApplication1.Controllers
         {
             try
             {
-                var obj = new Course { Id = id };
-                _unitOfWork.CourseRepository.Delete(obj);
-                _unitOfWork.Commit();
+                var course = _unitOfWork.CourseRepository.GetObj(x => x.Id == id);
+
+                if (course is null)
+                {
+                    return NotFound("invalid id");
+                }
+                _unitOfWork.CourseRepository.Delete(course);
+                _unitOfWork.Save();
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception exception)
             {
-                ModelState.AddModelError(null, exception.InnerException.Message);
-                return View(nameof(Index));
+                return BadRequest("can't delete this item since it's in use");
             }
         }
 

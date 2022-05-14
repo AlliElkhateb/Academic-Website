@@ -12,24 +12,24 @@
     <article class="col-4">
         <div>
             <span class="fw-bold">Name:</span>
-            <span class="ms-2">@Model.Name</span>
+            <span class="ms-2">@Model.Student.Name</span>
         </div>
 
         <div>
             <span class="fw-bold">Age:</span>
-            <span class="ms-2">@Model.Age</span>
+            <span class="ms-2">@Model.Student.Age</span>
         </div>
 
         <div>
             <span class="fw-bold">Address:</span>
-            <span class="ms-2">@Model.Address</span>
+            <span class="ms-2">@Model.Student.Address</span>
         </div>
 
         <div>
             <span class="fw-bold me-2">Department: </span>
-            @if (@Model.Department is not null)
+            @if (@Model.Student.Department is not null)
             {
-                <span>@Model.Department.Name</span>
+                <span>@Model.Student.Department.Name</span>
             }
             else
             {

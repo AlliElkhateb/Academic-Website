@@ -1,4 +1,4 @@
-﻿@model IEnumerable<StudentVM>
+﻿@model IEnumerable<Student>
 
 @{
     ViewBag.Title = "All Students";
@@ -29,22 +29,22 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var obj in Model)
             {
                 <tr>
                     <td>
-                        @item.Name
+                        @obj.Name
                     </td>
                     <td>
-                        @item.Age
+                        @obj.Age
                     </td>
                     <td>
-                        @item.Address
+                        @obj.Address
                     </td>
                     <td>
-                        @if (@item.Department is not null)
+                        @if (@obj.Department is not null)
                         {
-                            <span>@item.Department.Name</span>
+                            <span>@obj.Department.Name</span>
                         }
                         else
                         {
@@ -54,9 +54,9 @@
                         }
                     </td>
                     <td>
-                        <i class="bi bi-ticket-detailed"></i> <a asp-action="Details" asp-route-id="@item.Id" class="text-decoration-none">Details</a> |
-                        <i class="bi bi-pencil-square"></i> <a asp-action="Update" asp-route-id="@item.Id" class="text-decoration-none">Edit</a> |
-                        <i class="bi bi-trash3"></i> <partial name="_Delete" model="@item" />
+                        <i class="bi bi-ticket-detailed"></i> <a asp-action="Details" asp-route-id="@obj.Id" class="text-decoration-none">Details</a> |
+                        <i class="bi bi-pencil-square"></i> <a asp-action="Update" asp-route-id="@obj.Id" class="text-decoration-none">Edit</a> |
+                        <i class="bi bi-trash3"></i> <partial name="_Delete" model="@obj" />
                     </td>
                 </tr>
             }

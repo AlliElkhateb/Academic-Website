@@ -5,11 +5,13 @@ namespace WebAppRepositoryWithUOW.EF.IdentityModels
 {
     public class AppUser : IdentityUser
     {
-        [MaxLength(50)]
-        public string FirstName { get; set; }
+        [Required, MaxLength(50), Display(Name = "First Name")]
+        public string? FirstName { get; set; }
 
-        [MaxLength(50)]
-        public string LastName { get; set; }
+        [Required, MaxLength(50), Display(Name = "Last Name")]
+        public string? LastName { get; set; }
+
+        [Display(Name = "Profile Picture")]
         public byte[]? ProfilePicture { get; set; }
     }
 }

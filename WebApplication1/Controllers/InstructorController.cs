@@ -1,43 +1,51 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using WebAppRepositoryWithUOW.Core;
-using WebAppRepositoryWithUOW.Core.Models;
 using WebAppRepositoryWithUOW.Core.ViewModel;
+using WebAppRepositoryWithUOW.EF.UnitOfWork;
 
 namespace WebApplication1.Controllers
 {
     public class InstructorController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        public InstructorController(IUnitOfWork unitOfWork, IMapper mapper)
+        public InstructorController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _mapper = mapper;
         }
 
 
         //httpGet: get all departments
         public IActionResult Index()
         {
-            var instructors = _unitOfWork.InstructorRepository.GetAll();
-            var model = _mapper.Map<IEnumerable<InstructorVM>>(instructors).OrderBy(x => x.Name);
-            foreach (var instructor in model)
+            var instructors = _unitOfWork.InstructorRepository.GetAll(x => x.Course).OrderBy(x => x.Name);
+
+            if (instructors is null)
             {
-                instructor.Course = _unitOfWork.CourseRepository.Find(x => x.Id == instructor.CourseId);
+                return NotFound("no datat found");
             }
-            return View(model);
+
+            //foreach (var instructor in instructors)
+            //{
+            //    instructor.Course = _unitOfWork.CourseRepository.GetObj(x => x.Id == instructor.CourseId);
+            //}
+            return View(instructors);
         }
 
 
         //httpGet: get detail of object
         public IActionResult Details([FromRoute] int id)
         {
-            var instructor = _unitOfWork.InstructorRepository.Find(x => x.Id == id);
-            var model = _mapper.Map<InstructorVM>(instructor);
-            model.Course = _unitOfWork.CourseRepository.Find(x => x.Id == instructor.CourseId);
-            model.Department = _unitOfWork.DepartmentRepository.Find(x => x.Id == instructor.DepartmentId);
-            return View(model);
+            var instructor = new InstructorVM
+            {
+                Instructor = _unitOfWork.InstructorRepository.GetObj(x => x.Id == id, x => x.Course, x => x.Department),
+            };
+
+            if (instructor.Instructor is null)
+            {
+                return NotFound("invalid id");
+            }
+
+            return View(instructor);
         }
 
 
@@ -46,6 +54,7 @@ namespace WebApplication1.Controllers
         {
             var model = new InstructorVM
             {
+                Instructor = new Instructor(),
                 Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name),
                 Courses = _unitOfWork.CourseRepository.GetAll().OrderBy(x => x.Name)
             };
@@ -65,9 +74,8 @@ namespace WebApplication1.Controllers
                 return View(model);
             }
 
-            var obj = _mapper.Map<Instructor>(model);
-            _unitOfWork.InstructorRepository.Create(obj);
-            _unitOfWork.Commit();
+            _unitOfWork.InstructorRepository.Create(model.Instructor);
+            _unitOfWork.Save();
             return RedirectToAction(nameof(Index));
         }
 
@@ -75,11 +83,19 @@ namespace WebApplication1.Controllers
         //httpGet: create view to edit object
         public IActionResult Update([FromRoute] int id)
         {
-            var instructor = _unitOfWork.InstructorRepository.Find(x => x.Id == id);
-            var model = _mapper.Map<InstructorVM>(instructor);
-            model.Courses = _unitOfWork.CourseRepository.GetAll().OrderBy(x => x.Name);
-            model.Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name);
-            return View(model);
+            var instructor = new InstructorVM
+            {
+                Instructor = _unitOfWork.InstructorRepository.GetObj(x => x.Id == id),
+                Departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name),
+                Courses = _unitOfWork.CourseRepository.GetAll().OrderBy(x => x.Name)
+            };
+
+            if (instructor.Instructor is null)
+            {
+                return NotFound("invalid id");
+            }
+
+            return View(instructor);
         }
 
 
@@ -95,9 +111,8 @@ namespace WebApplication1.Controllers
                 return View(model);
             }
 
-            var obj = _mapper.Map<Instructor>(model);
-            _unitOfWork.InstructorRepository.Update(obj);
-            _unitOfWork.Commit();
+            _unitOfWork.InstructorRepository.Update(model.Instructor);
+            _unitOfWork.Save();
             return RedirectToAction(nameof(Index));
         }
 
@@ -107,15 +122,19 @@ namespace WebApplication1.Controllers
         {
             try
             {
-                var obj = new Instructor { Id = id };
-                _unitOfWork.InstructorRepository.Delete(obj);
-                _unitOfWork.Commit();
+                var instructor = _unitOfWork.InstructorRepository.GetObj(x => x.Id == id);
+
+                if (instructor is null)
+                {
+                    return NotFound("invalid id");
+                }
+                _unitOfWork.InstructorRepository.Delete(instructor);
+                _unitOfWork.Save();
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception exception)
             {
-                ModelState.AddModelError(null, exception.InnerException.Message);
-                return View(nameof(Index));
+                return BadRequest("can't delete this item since it's in use");
             }
         }
     }

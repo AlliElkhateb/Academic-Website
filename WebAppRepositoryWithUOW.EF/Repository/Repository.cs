@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using WebAppRepositoryWithUOW.Core.IRepository;
+using WebAppRepositoryWithUOW.EF.Data;
 
 namespace WebAppRepositoryWithUOW.EF.Repository
 {
-    public class BaseRepository<T> : IBaseRepository<T> where T : class
+    public class Repository<T> : IRepository<T> where T : class
     {
         private readonly AppDbContext _context;
-        public BaseRepository(AppDbContext context)
+        public Repository(AppDbContext context)
         {
             _context = context;
         }
@@ -26,7 +26,7 @@ namespace WebAppRepositoryWithUOW.EF.Repository
             IQueryable<T> query = _context.Set<T>();
             foreach (var navigationProperty in navigationProperties)
             {
-                query.Include(navigationProperty);
+                query = query.Include(navigationProperty);
             }
             return query.ToList();
         }
@@ -45,26 +45,26 @@ namespace WebAppRepositoryWithUOW.EF.Repository
             IQueryable<T> query = _context.Set<T>().Where(selector);
             foreach (var navigationProperty in navigationProperties)
             {
-                query.Include(navigationProperty);
+                query = query.Include(navigationProperty);
             }
             return query.ToList();
         }
 
 
         //get object with specific condition
-        public T Find(Expression<Func<T, bool>> selector)
+        public T GetObj(Expression<Func<T, bool>> selector)
         {
             return _context.Set<T>().SingleOrDefault(selector);
         }
 
 
         //get object with specific condition with include
-        public T Find(Expression<Func<T, bool>> selector, params Expression<Func<T, object>>[] navigationProperties)
+        public T GetObj(Expression<Func<T, bool>> selector, params Expression<Func<T, object>>[] navigationProperties)
         {
-            IQueryable<T> query = _context.Set<T>();
+            IQueryable<T> query = _context.Set<T>().Where(selector);
             foreach (var navigationProperty in navigationProperties)
             {
-                query.Include(navigationProperty);
+                query = query.Include(navigationProperty);
             }
             return query.SingleOrDefault(selector);
         }

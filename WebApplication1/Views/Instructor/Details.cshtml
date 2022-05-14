@@ -12,29 +12,29 @@
     <article class="col-4">
         <div>
             <span class="fw-bold">Name:</span>
-            <span class="ms-2">@Model.Name</span>
+            <span class="ms-2">@Model.Instructor.Name</span>
         </div>
 
         <div>
             <span class="fw-bold">Age:</span>
-            <span class="ms-2">@Model.Age</span>
+            <span class="ms-2">@Model.Instructor.Age</span>
         </div>
 
         <div>
             <span class="fw-bold">Address:</span>
-            <span class="ms-2">@Model.Address</span>
+            <span class="ms-2">@Model.Instructor.Address</span>
         </div>
 
         <div>
             <span class="fw-bold">Salary:</span>
-            <span class="ms-2">@Model.Salary</span>
+            <span class="ms-2">@Model.Instructor.Salary</span>
         </div>
 
         <div>
             <span class="fw-bold">Department: </span>
-            @if (@Model.Department is not null)
+            @if (@Model.Instructor.Department is not null)
             {
-                <span class="ms-2">@Model.Department.Name</span>
+                <span class="ms-2">@Model.Instructor.Department.Name</span>
             }
             else
             {
@@ -46,9 +46,9 @@
 
         <div>
             <span class="fw-bold">Course: </span>
-            @if (@Model.Course is not null)
+            @if (@Model.Instructor.Course is not null)
             {
-                <span class="ms-2">@Model.Course.Name</span>
+                <span class="ms-2">@Model.Instructor.Course.Name</span>
             }
             else
             {

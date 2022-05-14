@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using WebAppRepositoryWithUOW.EF;
+using WebAppRepositoryWithUOW.EF.Data;
 
 #nullable disable
 
@@ -155,7 +155,7 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("WebAppRepositoryWithUOW.Core.Models.Course", b =>
+            modelBuilder.Entity("WebAppRepositoryWithUOW.Core.Course", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -184,7 +184,7 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
                     b.ToTable("Courses");
                 });
 
-            modelBuilder.Entity("WebAppRepositoryWithUOW.Core.Models.Department", b =>
+            modelBuilder.Entity("WebAppRepositoryWithUOW.Core.Department", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -207,7 +207,7 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
                     b.ToTable("Departments");
                 });
 
-            modelBuilder.Entity("WebAppRepositoryWithUOW.Core.Models.Instructor", b =>
+            modelBuilder.Entity("WebAppRepositoryWithUOW.Core.Instructor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -246,7 +246,7 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
                     b.ToTable("Instructors");
                 });
 
-            modelBuilder.Entity("WebAppRepositoryWithUOW.Core.Models.Student", b =>
+            modelBuilder.Entity("WebAppRepositoryWithUOW.Core.Student", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -277,7 +277,7 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("WebAppRepositoryWithUOW.Core.Models.StudentCourse", b =>
+            modelBuilder.Entity("WebAppRepositoryWithUOW.Core.StudentCourse", b =>
                 {
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
@@ -424,10 +424,10 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WebAppRepositoryWithUOW.Core.Models.Course", b =>
+            modelBuilder.Entity("WebAppRepositoryWithUOW.Core.Course", b =>
                 {
-                    b.HasOne("WebAppRepositoryWithUOW.Core.Models.Department", "Department")
-                        .WithMany("Courses")
+                    b.HasOne("WebAppRepositoryWithUOW.Core.Department", "Department")
+                        .WithMany()
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -435,16 +435,16 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
                     b.Navigation("Department");
                 });
 
-            modelBuilder.Entity("WebAppRepositoryWithUOW.Core.Models.Instructor", b =>
+            modelBuilder.Entity("WebAppRepositoryWithUOW.Core.Instructor", b =>
                 {
-                    b.HasOne("WebAppRepositoryWithUOW.Core.Models.Course", "Course")
-                        .WithMany("Instructors")
+                    b.HasOne("WebAppRepositoryWithUOW.Core.Course", "Course")
+                        .WithMany()
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("WebAppRepositoryWithUOW.Core.Models.Department", "Department")
-                        .WithMany("Instructors")
+                    b.HasOne("WebAppRepositoryWithUOW.Core.Department", "Department")
+                        .WithMany()
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -454,10 +454,10 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
                     b.Navigation("Department");
                 });
 
-            modelBuilder.Entity("WebAppRepositoryWithUOW.Core.Models.Student", b =>
+            modelBuilder.Entity("WebAppRepositoryWithUOW.Core.Student", b =>
                 {
-                    b.HasOne("WebAppRepositoryWithUOW.Core.Models.Department", "Department")
-                        .WithMany("Students")
+                    b.HasOne("WebAppRepositoryWithUOW.Core.Department", "Department")
+                        .WithMany()
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -465,16 +465,16 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
                     b.Navigation("Department");
                 });
 
-            modelBuilder.Entity("WebAppRepositoryWithUOW.Core.Models.StudentCourse", b =>
+            modelBuilder.Entity("WebAppRepositoryWithUOW.Core.StudentCourse", b =>
                 {
-                    b.HasOne("WebAppRepositoryWithUOW.Core.Models.Course", "Course")
-                        .WithMany("StudentCourses")
+                    b.HasOne("WebAppRepositoryWithUOW.Core.Course", "Course")
+                        .WithMany()
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("WebAppRepositoryWithUOW.Core.Models.Student", "Student")
-                        .WithMany("StudentCourses")
+                    b.HasOne("WebAppRepositoryWithUOW.Core.Student", "Student")
+                        .WithMany()
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -482,27 +482,6 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
                     b.Navigation("Course");
 
                     b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("WebAppRepositoryWithUOW.Core.Models.Course", b =>
-                {
-                    b.Navigation("Instructors");
-
-                    b.Navigation("StudentCourses");
-                });
-
-            modelBuilder.Entity("WebAppRepositoryWithUOW.Core.Models.Department", b =>
-                {
-                    b.Navigation("Courses");
-
-                    b.Navigation("Instructors");
-
-                    b.Navigation("Students");
-                });
-
-            modelBuilder.Entity("WebAppRepositoryWithUOW.Core.Models.Student", b =>
-                {
-                    b.Navigation("StudentCourses");
                 });
 #pragma warning restore 612, 618
         }

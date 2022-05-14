@@ -1,49 +1,63 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using WebAppRepositoryWithUOW.Core;
-using WebAppRepositoryWithUOW.Core.Models;
 using WebAppRepositoryWithUOW.Core.ViewModel;
+using WebAppRepositoryWithUOW.EF.UnitOfWork;
 
 namespace WebApplication1.Controllers
 {
     public class DepartmentController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
 
-        public DepartmentController(IUnitOfWork unitOfWork, IMapper mapper)
+        public DepartmentController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _mapper = mapper;
         }
 
 
         //httpGet: get all departments
         public IActionResult Index()
         {
-            var departments = _unitOfWork.DepartmentRepository.GetAll();
-            var model = _mapper.Map<IEnumerable<DepartmentVM>>(departments).OrderBy(x => x.Name);
-            return View(model);
+            var departments = _unitOfWork.DepartmentRepository.GetAll().OrderBy(x => x.Name);
+
+            if (departments is null)
+            {
+                return NotFound("no datat found");
+            }
+
+            return View(departments);
         }
 
 
         //httpGet: get detail of object
         public IActionResult Details([FromRoute] int id)
         {
-            var department = _unitOfWork.DepartmentRepository.Find(x => x.Id == id);
-            var model = _mapper.Map<DepartmentVM>(department);
-            model.Courses = _unitOfWork.CourseRepository.GetAll(x => x.DepartmentId == department.Id);
-            model.Instructors = _unitOfWork.InstructorRepository.GetAll(x => x.DepartmentId == department.Id);
-            model.Students = _unitOfWork.StudentRepository.GetAll(x => x.DepartmentId == department.Id);
-            //return PartialView(model);
-            return View(model);
+            var dapartment = new DepartmentVM
+            {
+                Department = _unitOfWork.DepartmentRepository.GetObj(x => x.Id == id),
+                Courses = _unitOfWork.CourseRepository.GetAll(x => x.DepartmentId == id),
+                Instructors = _unitOfWork.InstructorRepository.GetAll(x => x.DepartmentId == id),
+                Students = _unitOfWork.StudentRepository.GetAll(x => x.DepartmentId == id),
+            };
+
+            if (dapartment.Department is null)
+            {
+                return NotFound("invalid id");
+            }
+
+            //return PartialView(dapartment);
+            return View(dapartment);
         }
 
 
         //httpGet: create view to add new object
         public IActionResult Create()
         {
-            var model = new DepartmentVM();
+            var model = new DepartmentVM
+            {
+                Department = new Department()
+            };
+
             return View(model);
         }
 
@@ -53,15 +67,13 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create([FromForm] DepartmentVM model)
         {
-            //Bind("Name, Manager")
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            var obj = _mapper.Map<Department>(model);
-            _unitOfWork.DepartmentRepository.Create(obj);
-            _unitOfWork.Commit();
+            _unitOfWork.DepartmentRepository.Create(model.Department);
+            _unitOfWork.Save();
             return RedirectToAction(nameof(Index));
         }
 
@@ -69,9 +81,17 @@ namespace WebApplication1.Controllers
         //httpGet: create view to edit object
         public IActionResult Update([FromRoute] int id)
         {
-            var department = _unitOfWork.DepartmentRepository.Find(x => x.Id == id);
-            var model = _mapper.Map<DepartmentVM>(department);
-            return View(model);
+            var dapartment = new DepartmentVM
+            {
+                Department = _unitOfWork.DepartmentRepository.GetObj(x => x.Id == id)
+            };
+
+            if (dapartment.Department is null)
+            {
+                return NotFound("invalid id");
+            }
+
+            return View(dapartment);
         }
 
 
@@ -85,9 +105,8 @@ namespace WebApplication1.Controllers
                 return View(model);
             }
 
-            var obj = _mapper.Map<Department>(model);
-            _unitOfWork.DepartmentRepository.Update(obj);
-            _unitOfWork.Commit();
+            _unitOfWork.DepartmentRepository.Update(model.Department);
+            _unitOfWork.Save();
             return RedirectToAction(nameof(Index));
         }
 
@@ -97,15 +116,20 @@ namespace WebApplication1.Controllers
         {
             try
             {
-                var obj = new Department { Id = id };
-                _unitOfWork.DepartmentRepository.Delete(obj);
-                _unitOfWork.Commit();
+                var dapartment = _unitOfWork.DepartmentRepository.GetObj(x => x.Id == id);
+
+                if (dapartment is null)
+                {
+                    return NotFound("invalid id");
+                }
+
+                _unitOfWork.DepartmentRepository.Delete(dapartment);
+                _unitOfWork.Save();
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception exception)
             {
-                ModelState.AddModelError(null, exception.InnerException.Message);
-                return View(nameof(Index));
+                return BadRequest("can't delete this item since it's in use");
             }
         }
 
@@ -114,7 +138,7 @@ namespace WebApplication1.Controllers
         //in form must be hidden field for (id) because remote take its parameter from input fields 
         public IActionResult NameExist(int id, string name)
         {
-            var department = _unitOfWork.DepartmentRepository.Find(x => x.Name.ToLower() == name.ToLower());
+            var department = _unitOfWork.DepartmentRepository.GetObj(x => x.Name.ToLower() == name.ToLower());
 
             if (id == 0) //add new object
             {
