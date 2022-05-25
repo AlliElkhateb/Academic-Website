@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebAppRepositoryWithUOW.EF.Data;
 
@@ -11,9 +12,10 @@ using WebAppRepositoryWithUOW.EF.Data;
 namespace WebAppRepositoryWithUOW.EF.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220525142321_AddAppUser")]
+    partial class AddAppUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -181,7 +183,7 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("Courses", (string)null);
+                    b.ToTable("Courses");
                 });
 
             modelBuilder.Entity("WebAppRepositoryWithUOW.Core.Department", b =>
@@ -204,7 +206,7 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Departments", (string)null);
+                    b.ToTable("Departments");
                 });
 
             modelBuilder.Entity("WebAppRepositoryWithUOW.Core.Instructor", b =>
@@ -243,7 +245,7 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("Instructors", (string)null);
+                    b.ToTable("Instructors");
                 });
 
             modelBuilder.Entity("WebAppRepositoryWithUOW.Core.Student", b =>
@@ -274,7 +276,7 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("Students", (string)null);
+                    b.ToTable("Students");
                 });
 
             modelBuilder.Entity("WebAppRepositoryWithUOW.Core.StudentCourse", b =>
@@ -292,7 +294,7 @@ namespace WebAppRepositoryWithUOW.EF.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("StudentCourses", (string)null);
+                    b.ToTable("StudentCourses");
                 });
 
             modelBuilder.Entity("WebAppRepositoryWithUOW.EF.IdentityModels.AppUser", b =>

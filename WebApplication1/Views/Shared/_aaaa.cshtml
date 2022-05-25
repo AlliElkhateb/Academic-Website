@@ -1,0 +1,31 @@
+﻿@inject UserManager<AppUser> _userManager
+@inject SignInManager<AppUser> _signInManager
+
+<ul class="navbar-nav">
+                @*(!User.Identity.IsAuthenticated)*@
+
+                @if (!_signInManager.IsSignedIn(User))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-controller="account" asp-action="Registration">Registration</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-controller="account" asp-action="Login">login</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item mt-2 me-2">
+                        Welcome @User.Identity.Name
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-controller="account" asp-action="EditProfile" asp-route-id="@_userManager.GetUserAsync(User).Result.Id">Edit Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-controller="account" asp-action="Logout">Log out</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-controller="account" asp-action="Profile" asp-route-id="@_userManager.GetUserAsync(User).Result.Id">Profile</a>
+                    </li>
+                }
+            </ul>

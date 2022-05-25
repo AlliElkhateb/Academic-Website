@@ -10,6 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddRazorPages();
+
 //register generic base repository
 //builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 
@@ -23,6 +25,7 @@ builder.Services.AddDbContext<AppDbContext>(
 //register UserManager<IdentityUser> == repository for IdentityUser class - RoleManager<IdentityRole> - SignInManager<IdentityUser> 
 builder.Services.AddIdentity<AppUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()    //add UserStore class - RoleStore class that interact with database 
+                .AddDefaultUI()
                 .AddDefaultTokenProviders();
 
 //register IunitOfWork
@@ -47,6 +50,8 @@ app.UseRouting();
 app.UseAuthentication();   //check cookie for credential (username & password)
 
 app.UseAuthorization();   //check for role
+
+app.MapRazorPages();
 
 app.MapControllerRoute(
     name: "default",

@@ -25,7 +25,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Registration([FromForm] RegistrationVM model)
+        public async Task<IActionResult> Registration([FromForm] RegistrationVM model, IFormFile? file)
         {
             #region ImageValidation
 
