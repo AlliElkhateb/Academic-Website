@@ -10,7 +10,6 @@
 
 @if (Model.Any())
 {
-    <div asp-validation-summary="All" class="text-danger"></div>
     <table class="table mt-4">
         <thead>
             <tr class="table-secondary">
@@ -26,7 +25,7 @@
             @foreach (var role in Model)
             {
                 <tr class="table-light">
-                    <td >
+                    <td>
                         @role.Name
                     </td>
                     <td>

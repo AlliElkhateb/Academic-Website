@@ -4,7 +4,9 @@ namespace WebAppRepositoryWithUOW.Core.IdentityVM
 {
     public class RolesVM
     {
-        [Required, StringLength(256)]
-        public string Name { get; set; }
+        [Required,
+         StringLength(50)]
+        public string? Name { get; set; }
+        public bool IsSelected { get; set; }
     }
 }

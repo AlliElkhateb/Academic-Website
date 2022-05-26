@@ -8,33 +8,22 @@
 <hr />
 @if (Model.Any())
 {
-    <div asp-validation-summary="All" class="text-danger"></div>
     <table class="table">
         <thead>
             <tr>
-                <th>
-                    Department
-                </th>
-                <th>
-                    Manager
-                </th>
-                <th>
-                    Controls
-                </th>
+                <th>Department</th>
+                <th>Manager</th>
+                <th>Controls</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var obj in Model)
             {
                 <tr>
+                    <td>@obj.Name /td>
+                    <td>@obj.Manager</td>
                     <td>
-                        @obj.Name
-                    </td>
-                    <td>
-                        @obj.Manager
-                    </td>
-                    <td>
-                        @*<a href="#" data-id="@item.Id" onclick="ajaxCall(event)">Details</a>*@
+                            @*<a href="#" data-id="@item.Id" onclick="ajaxCall(event)">Details</a>*@
                         <i class="bi bi-ticket-detailed"></i> <a asp-action="details" asp-route-id="@obj.Id" class="text-decoration-none">Details</a> |
                         <i class="bi bi-pencil-square"></i> <a asp-action="Update" asp-route-id="@obj.Id" class="text-decoration-none">Edit</a> |
                         <i class="bi bi-trash3"></i> <partial name="_Delete" model="@obj" />

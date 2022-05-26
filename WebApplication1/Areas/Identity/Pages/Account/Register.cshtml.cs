@@ -94,6 +94,14 @@ namespace WebApplication1.Areas.Identity.Pages.Account
                     Email = Input.Email,
                 };
 
+                var userWithSameEmail = await _userManager.FindByEmailAsync(user.Email);
+
+                if (userWithSameEmail is not null)
+                {
+                    ModelState.AddModelError("email", "this email already exists");
+                    return Page();
+                }
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)

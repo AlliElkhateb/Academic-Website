@@ -44,14 +44,11 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage
             public string PhoneNumber { get; set; }
 
             [Display(Name = "Profile Picture")]
-            public byte[]? ProfilePicture { get; set; }
+            public byte[] ProfilePicture { get; set; }
         }
 
-        private async Task LoadAsync(AppUser user)
+        private void LoadAsync(AppUser user)
         {
-            //var userName = await _userManager.GetUserNameAsync(user);
-            //var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-
             Username = user.UserName;
 
             Input = new InputModel
@@ -71,7 +68,7 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            await LoadAsync(user);
+            LoadAsync(user);
             return Page();
         }
 
@@ -85,7 +82,7 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage
 
             if (!ModelState.IsValid)
             {
-                await LoadAsync(user);
+                LoadAsync(user);
                 return Page();
             }
 
@@ -96,14 +93,14 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage
                 if (!extentions.Contains(Path.GetExtension(file.FileName).ToLower()))    //check file extention
                 {
                     ModelState.AddModelError("imagProfilePicturee", "only .jpg, .png image are allowed");
-                    await LoadAsync(user);
+                    LoadAsync(user);
                     return Page();
                 }
 
                 if (file.Length > 2097152)    //check file size
                 {
                     ModelState.AddModelError("image", "image can not be more than 2 MB");
-                    await LoadAsync(user);
+                    LoadAsync(user);
                     return Page();
                 }
 
@@ -115,7 +112,7 @@ namespace WebApplication1.Areas.Identity.Pages.Account.Manage
 
                 await _userManager.UpdateAsync(user);
             }
-                
+
 
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             var firstName = user.FirstName;

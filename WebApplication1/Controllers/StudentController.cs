@@ -37,17 +37,17 @@ namespace WebApplication1.Controllers
                 StudentCourses = _unitOfWork.StudentCourseRepository.GetAll(x => x.StudentId == id),
             };
 
+            if (student.Student is null)
+            {
+                return NotFound("invalid id");
+            }
+
             var listOfCourses = new List<Course>();
             foreach (var course in student.StudentCourses)
             {
                 listOfCourses.Add(_unitOfWork.CourseRepository.GetObj(c => c.Id == course.CourseId));
             }
             student.Courses = listOfCourses;
-
-            if (student.Student is null)
-            {
-                return NotFound("invalid id");
-            }
 
             return View(student);
         }

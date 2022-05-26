@@ -23,7 +23,7 @@ builder.Services.AddDbContext<AppDbContext>(
         ));
 
 //register UserManager<IdentityUser> == repository for IdentityUser class - RoleManager<IdentityRole> - SignInManager<IdentityUser> 
-builder.Services.AddIdentity<AppUser, IdentityRole>()
+builder.Services.AddIdentity<AppUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<AppDbContext>()    //add UserStore class - RoleStore class that interact with database 
                 .AddDefaultUI()
                 .AddDefaultTokenProviders();

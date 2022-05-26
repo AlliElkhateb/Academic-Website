@@ -51,8 +51,9 @@ namespace WebApplication1.Controllers
             }
             catch (Exception exception)
             {
-                ModelState.AddModelError(null, exception.InnerException.Message);
-                return View(nameof(Index));
+                return BadRequest("can't delete this item since it's in use");
+                //ModelState.AddModelError(null, exception.InnerException.Message);
+                //return View(nameof(Index));
             }
         }
     }

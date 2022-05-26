@@ -7,40 +7,23 @@
 <hr />
 @if (Model.Any())
 {
-    <div asp-validation-summary="All" class="text-danger"></div>
     <table class="table">
         <thead>
             <tr>
-                <th>
-                    Name
-                </th>
-                <th>
-                    Age
-                </th>
-                <th>
-                    Address
-                </th>
-                <th>
-                    Department
-                </th>
-                <th>
-                    Controls
-                </th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Address</th>
+                <th>Department</th>
+                <th>Controls</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var obj in Model)
             {
                 <tr>
-                    <td>
-                        @obj.Name
-                    </td>
-                    <td>
-                        @obj.Age
-                    </td>
-                    <td>
-                        @obj.Address
-                    </td>
+                    <td>@obj.Name</td>
+                    <td>@obj.Age</td>
+                    <td>@obj.Address</td>
                     <td>
                         @if (@obj.Department is not null)
                         {

@@ -7,37 +7,22 @@
 <hr />
 @if (Model.Any())
 {
-    <div asp-validation-summary="All" class="text-danger"></div>
     <table class="table">
         <thead>
             <tr>
-                <th>
-                    Course
-                </th>
-                <th>
-                    Max Degree
-                </th>
-                <th>
-                    Min Degree
-                </th>
-                <th>
-                    Controls
-                </th>
+                <th>Course</th>
+                <th>Max Degree</th>
+                <th>Min Degree</th>
+                <th>Controls</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var obj in Model)
             {
                 <tr>
-                    <td>
-                        @obj.Name
-                    </td>
-                    <td>
-                        @obj.MaxDegree
-                    </td>
-                    <td>
-                        @obj.MinDegree
-                    </td>
+                    <td>@obj.Name</td>
+                    <td>@obj.MaxDegree</td>
+                    <td>@obj.MinDegree</td>
                     <td>
                         <i class="bi bi-ticket-detailed"></i> <a asp-action="Details" asp-route-id="@obj.Id" class="text-decoration-none">Details</a> |
                         <i class="bi bi-pencil-square"></i> <a asp-action="Update" asp-route-id="@obj.Id" class="text-decoration-none">Edit</a> |
