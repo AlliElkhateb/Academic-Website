@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebAppRepositoryWithUOW.EF.Data;
+using WebAppRepositoryWithUOW.EF.DbInitializer;
 using WebAppRepositoryWithUOW.EF.IdentityModels;
 using WebAppRepositoryWithUOW.EF.UnitOfWork;
 
@@ -34,6 +35,8 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 //register Auto Mapper
 builder.Services.AddAutoMapper(typeof(Program));
 
+builder.Services.AddScoped<IDbInitializer, DbInitializer>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -47,6 +50,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+SeedDatabase();
+
 app.UseAuthentication();   //check cookie for credential (username & password)
 
 app.UseAuthorization();   //check for role
@@ -58,3 +63,10 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+void SeedDatabase()
+{
+    using var scope = app.Services.CreateScope();
+    var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+    dbInitializer.Initialize();
+}
