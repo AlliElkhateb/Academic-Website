@@ -26,7 +26,7 @@ namespace WebAppRepositoryWithUOW.EF.DbInitializer
             //apply migrations if they are not applied
             try
             {
-                //_context.Database.EnsureCreated();
+                _context.Database.EnsureCreated();
                 if (_context.Database.GetPendingMigrations().Any())
                 {
                     _context.Database.Migrate();
